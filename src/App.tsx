@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import Problem from './components/Problem'
 import FounderNote from './components/FounderNote'
 import SeeItInAction from './components/SeeItInAction'
+import Safety from './components/Safety'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Problem />
       <FounderNote />
       <SeeItInAction />
+      <Safety />
     </>
   )
 }

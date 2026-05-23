@@ -6,6 +6,7 @@ import SeeItInAction from './components/SeeItInAction'
 import Safety from './components/Safety'
 import SetupSteps from './components/SetupSteps'
 import Pricing from './components/Pricing'
+import FAQ from './components/FAQ'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
       <Safety />
       <SetupSteps />
       <Pricing />
+      <FAQ />
     </>
   )
 }

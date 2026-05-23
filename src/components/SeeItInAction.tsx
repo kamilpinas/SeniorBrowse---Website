@@ -33,6 +33,7 @@ import {
   CornersOut,
   Heart,
 } from "@phosphor-icons/react"
+import { useReveal } from "../hooks/useReveal"
 
 type PageKey = "news" | "home" | "youtube" | "photos" | "email"
 
@@ -77,6 +78,11 @@ function fmt(s: number) {
 const TOTAL = 62
 
 export default function SeeItInAction() {
+  // ── scroll reveals ────────────────────────────────────────────────
+  const headReveal = useReveal<HTMLElement>()
+  const demoReveal = useReveal<HTMLDivElement>(0.05)
+  const walkReveal = useReveal<HTMLDivElement>(0.05)
+
   // ── demo state ────────────────────────────────────────────────────
   const [currentPage, setCurrentPage] = useState<PageKey>("news")
   const [urlText, setUrlText] = useState(PAGE_URLS.news)
@@ -300,7 +306,10 @@ export default function SeeItInAction() {
 
   return (
     <section className="see-it" id="see-it" aria-labelledby="see-h">
-      <header className="see-head">
+      <header
+        ref={headReveal.ref}
+        className={`see-head reveal-cascade${headReveal.shown ? " shown" : ""}`}
+      >
         <p className="eyebrow-c">Try it yourself</p>
         <h2 id="see-h" className="see-h2">
           The side panel does <em>the work</em>.
@@ -311,7 +320,11 @@ export default function SeeItInAction() {
       </header>
 
       {/* ── Interactive Demo ── */}
-      <div className="demo" id="demo">
+      <div
+        ref={demoReveal.ref}
+        className={`demo reveal zoom${demoReveal.shown ? " shown" : ""}`}
+        id="demo"
+      >
         <div className={`demo-tooltip${tooltipDismissed ? " fade" : ""}`}>
           <HandPointing
             weight="fill"
@@ -1048,7 +1061,10 @@ export default function SeeItInAction() {
       </div>
 
       {/* ── Walkthrough video ── */}
-      <div className="walkthrough">
+      <div
+        ref={walkReveal.ref}
+        className={`walkthrough reveal from-right${walkReveal.shown ? " shown" : ""}`}
+      >
         <p className="walk-eyebrow">The 60-second walkthrough</p>
         <h3 className="walk-h3">
           See SeniorBrowse on <em>your parent's</em> screen.

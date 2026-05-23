@@ -2,10 +2,16 @@ import {
   Heart, Envelope, Play, Newspaper, Image, House,
   ArrowLeft, ArrowRight, HandPointing,
 } from '@phosphor-icons/react'
+import { useReveal } from '../hooks/useReveal'
+import { useParallax } from '../hooks/useParallax'
 
-function StepArrow() {
+function StepArrow({ idx }: { idx: number }) {
   return (
-    <span className="step-arrow" aria-hidden="true">
+    <span
+      className="step-arrow"
+      aria-hidden="true"
+      style={{ ['--i' as string]: idx } as React.CSSProperties}
+    >
       <svg viewBox="0 0 80 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2.5 5">
         <path d="M4 12 L 64 12" />
         <path d="M56 4 L 64 12 L 56 20" strokeDasharray="0" />
@@ -15,18 +21,32 @@ function StepArrow() {
 }
 
 export default function SetupSteps() {
+  const head = useReveal<HTMLElement>(0.3)
+  const grid = useReveal<HTMLDivElement>(0.1)
+  // Three different parallax speeds — each thumb drifts on its own
+  // plane as you scroll past, creating real depth.
+  const thumb1 = useParallax<HTMLDivElement>(0.14)
+  const thumb2 = useParallax<HTMLDivElement>(0.06)
+  const thumb3 = useParallax<HTMLDivElement>(0.18)
+
   return (
     <section className="setup" aria-labelledby="setup-h">
-      <header className="setup-head">
+      <header
+        ref={head.ref}
+        className={`setup-head reveal-cascade${head.shown ? ' shown' : ''}`}
+      >
         <p className="eyebrow-c">Getting started</p>
         <h2 id="setup-h">Three steps. Done in <em>five minutes</em>.</h2>
         <p className="subhead">Install and start your trial, customise the experience, then walk through the tutorial together. That's the entire setup.</p>
       </header>
 
-      <div className="steps">
+      <div
+        ref={grid.ref}
+        className={`steps reveal-stagger${grid.shown ? ' shown' : ''}`}
+      >
 
-        <article className="step">
-          <div className="step-thumb" aria-hidden="true">
+        <article className="step from-left" style={{ ['--i' as string]: 0 } as React.CSSProperties}>
+          <div ref={thumb1} className="step-thumb parallax" aria-hidden="true">
             <div className="tc tc-trial">
               <div className="trial-head">
                 <span className="mk"><Heart weight="fill" size={14} /></span>
@@ -50,10 +70,10 @@ export default function SetupSteps() {
           <p>Add to Browser, drop in your email, and name the caregiver and the senior. Free 7-day trial begins right away.</p>
         </article>
 
-        <StepArrow />
+        <StepArrow idx={1} />
 
-        <article className="step">
-          <div className="step-thumb" aria-hidden="true">
+        <article className="step" style={{ ['--i' as string]: 2 } as React.CSSProperties}>
+          <div ref={thumb2} className="step-thumb parallax" aria-hidden="true">
             <div className="tc tc-customise">
               <div className="cu-row">
                 <span className="cu-lab">Shortcuts</span>
@@ -93,10 +113,10 @@ export default function SetupSteps() {
           <p>Pick starting shortcuts, theme colour, element size, and safety rules. Takes about a minute.</p>
         </article>
 
-        <StepArrow />
+        <StepArrow idx={3} />
 
-        <article className="step">
-          <div className="step-thumb" aria-hidden="true">
+        <article className="step from-right" style={{ ['--i' as string]: 4 } as React.CSSProperties}>
+          <div ref={thumb3} className="step-thumb parallax" aria-hidden="true">
             <div className="tc tc-tour">
               <div className="tour-panel">
                 <span className="tour-btn home"><House weight="bold" size={11} /></span>

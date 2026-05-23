@@ -1,10 +1,19 @@
 import { Heart } from '@phosphor-icons/react'
 import signatureImg from '../assets/signature-kamil.png'
+import { useReveal } from '../hooks/useReveal'
+import { useParallax } from '../hooks/useParallax'
 
 export default function FounderNote() {
+  const reveal = useReveal<HTMLElement>()
+  const parallaxRef = useParallax<HTMLElement>(0.12)
+
   return (
-    <section className="founder-wrap" aria-labelledby="founder-h">
-      <article className="founder">
+    <section
+      ref={reveal.ref}
+      className={`founder-wrap reveal tilt-left${reveal.shown ? ' shown' : ''}`}
+      aria-labelledby="founder-h"
+    >
+      <article ref={parallaxRef} className="founder parallax">
         <header className="letterhead">
           <span className="letterhead-l">
             <span className="mk" aria-hidden="true"><Heart weight="fill" size={13} /></span>

@@ -1,6 +1,13 @@
+import { useReveal } from '../hooks/useReveal'
+
 export default function Problem() {
+  const { ref, shown } = useReveal<HTMLElement>()
   return (
-    <section className="problem" aria-labelledby="problem-h">
+    <section
+      ref={ref}
+      className={`problem reveal-cascade${shown ? ' shown' : ''}`}
+      aria-labelledby="problem-h"
+    >
       <p className="eyebrow-c">The Problem</p>
       <h2 id="problem-h">
         Modern browsers were built for people who grew up <em>online</em>.

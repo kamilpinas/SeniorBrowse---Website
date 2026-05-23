@@ -1,3 +1,4 @@
+import ScrollProgress from './components/ScrollProgress'
 import Topbar from './components/Topbar'
 import Hero from './components/Hero'
 import Problem from './components/Problem'
@@ -12,6 +13,7 @@ import FinalCTA from './components/FinalCTA'
 export default function App() {
   return (
     <>
+      <ScrollProgress />
       <Topbar />
       <Hero />
       <Problem />

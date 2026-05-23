@@ -1,9 +1,17 @@
 import { PuzzlePiece } from '@phosphor-icons/react'
+import { useReveal } from '../hooks/useReveal'
 
 export default function FinalCTA() {
+  const cta = useReveal<HTMLElement>()
+  const footer = useReveal<HTMLElement>(0.05)
+
   return (
     <>
-      <section className="final-cta" aria-labelledby="final-cta-h">
+      <section
+        ref={cta.ref}
+        className={`final-cta reveal-cascade${cta.shown ? ' shown' : ''}`}
+        aria-labelledby="final-cta-h"
+      >
         <h2 id="final-cta-h" className="final-cta-h">
           You set it up. They just <em>browse</em>.
         </h2>
@@ -19,7 +27,10 @@ export default function FinalCTA() {
         </p>
       </section>
 
-      <footer className="site-footer">
+      <footer
+        ref={footer.ref}
+        className={`site-footer reveal${footer.shown ? ' shown' : ''}`}
+      >
         <div className="footer-grid">
           <div className="footer-l">
             <span className="brand-name-sm">

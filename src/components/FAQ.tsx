@@ -1,4 +1,5 @@
 import { CaretRight } from '@phosphor-icons/react'
+import { useReveal } from '../hooks/useReveal'
 
 const FAQS = [
   {
@@ -36,16 +37,29 @@ const FAQS = [
 ]
 
 export default function FAQ() {
+  const head = useReveal<HTMLElement>(0.3)
+  const list = useReveal<HTMLDivElement>(0.05)
+
   return (
     <section className="faq" id="faq" aria-labelledby="faq-h">
-      <header className="faq-head">
+      <header
+        ref={head.ref}
+        className={`faq-head reveal-cascade${head.shown ? ' shown' : ''}`}
+      >
         <p className="eyebrow-c">Common questions</p>
         <h2 id="faq-h">Questions caregivers actually ask.</h2>
       </header>
 
-      <div className="faq-list">
+      <div
+        ref={list.ref}
+        className={`faq-list reveal-stagger${list.shown ? ' shown' : ''}`}
+      >
         {FAQS.map((f, i) => (
-          <details key={i} className="faq-row">
+          <details
+            key={i}
+            className="faq-row"
+            style={{ ['--i' as string]: i } as React.CSSProperties}
+          >
             <summary className="faq-q">
               <span>{f.q}</span>
               <CaretRight weight="bold" size={20} className="chev" aria-hidden="true" />

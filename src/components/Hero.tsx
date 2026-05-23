@@ -24,6 +24,7 @@ import {
   XCircle,
   DotsThreeVertical,
 } from "@phosphor-icons/react"
+import { useParallax } from "../hooks/useParallax"
 
 const VOL_COLORS = [
   "#c44a30",
@@ -41,6 +42,7 @@ const VOL_COLORS = [
 ]
 
 export default function Hero() {
+  const parallaxRef = useParallax<HTMLDivElement>(0.18)
   return (
     <section className="hero">
       <div className="hero-copy">
@@ -75,7 +77,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="product-wrap anim-up d5" aria-hidden="true">
+      <div ref={parallaxRef} className="product-wrap anim-up d5 parallax" aria-hidden="true">
         <div className="window">
           <div className="titlebar">
             <div className="lights">

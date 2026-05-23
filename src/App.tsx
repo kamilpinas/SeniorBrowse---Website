@@ -4,6 +4,7 @@ import Problem from './components/Problem'
 import FounderNote from './components/FounderNote'
 import SeeItInAction from './components/SeeItInAction'
 import Safety from './components/Safety'
+import SetupSteps from './components/SetupSteps'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
       <FounderNote />
       <SeeItInAction />
       <Safety />
+      <SetupSteps />
     </>
   )
 }

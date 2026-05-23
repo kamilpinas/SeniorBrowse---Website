@@ -1,4 +1,7 @@
-import { Heart, PuzzlePiece, LockSimple, Play, Newspaper, Image, Envelope, Sun, VideoCamera, Book, Globe } from '@phosphor-icons/react'
+import {
+  Heart, Envelope, Play, Newspaper, Image, House,
+  ArrowLeft, ArrowRight, HandPointing,
+} from '@phosphor-icons/react'
 
 function StepArrow() {
   return (
@@ -16,99 +19,99 @@ export default function SetupSteps() {
     <section className="setup" aria-labelledby="setup-h">
       <header className="setup-head">
         <p className="eyebrow-c">Getting started</p>
-        <h2 id="setup-h">Five minutes to set up. Done in <em>one</em>.</h2>
-        <p className="subhead">Add the extension, enter a few names and favourite sites, set a PIN. That's the entire installation.</p>
+        <h2 id="setup-h">Three steps. Done in <em>five minutes</em>.</h2>
+        <p className="subhead">Install and start your trial, customise the experience, then walk through the tutorial together. That's the entire setup.</p>
       </header>
 
       <div className="steps">
 
         <article className="step">
           <div className="step-thumb" aria-hidden="true">
-            <div className="tc tc-add">
-              <div className="app">
-                <span className="mk"><Heart weight="fill" size={18} /></span>
-                <span className="label">
+            <div className="tc tc-trial">
+              <div className="trial-head">
+                <span className="mk"><Heart weight="fill" size={14} /></span>
+                <div className="brand-col">
                   <span className="t">SeniorBrowse</span>
-                  <span className="s">By kamilpinas.com</span>
-                </span>
+                  <span className="s">Start 7-day free trial</span>
+                </div>
               </div>
-              <button className="btn-add" type="button">
-                <PuzzlePiece weight="bold" size={13} /> Add to Browser
-              </button>
+              <div className="trial-field">
+                <Envelope weight="fill" size={11} />
+                <span>anna@family.com</span>
+              </div>
+              <div className="trial-pair">
+                <span className="pair-chip"><b>YOU</b>Anna</span>
+                <span className="pair-chip"><b>SENIOR</b>Maria<span className="caret" /></span>
+              </div>
             </div>
           </div>
           <p className="step-num">Step 01</p>
-          <h3>Add to Chrome</h3>
-          <p>One click. Free 7-day trial begins automatically.</p>
+          <h3>Install &amp; start trial</h3>
+          <p>Add to Browser, drop in your email, and name the caregiver and the senior. Free 7-day trial begins right away.</p>
         </article>
 
         <StepArrow />
 
         <article className="step">
           <div className="step-thumb" aria-hidden="true">
-            <div className="tc tc-names">
-              <div className="field">
-                <span className="lab">Your name</span>
-                <span className="input">Anna</span>
+            <div className="tc tc-customise">
+              <div className="cu-row">
+                <span className="cu-lab">Shortcuts</span>
+                <span className="cu-vals">
+                  <span className="mini-ic ic-yt"><Play weight="fill" size={8} /></span>
+                  <span className="mini-ic ic-bbc"><Newspaper weight="fill" size={8} /></span>
+                  <span className="mini-ic ic-photos"><Image weight="fill" size={8} /></span>
+                  <span className="mini-ic ic-mail"><Envelope weight="fill" size={8} /></span>
+                </span>
               </div>
-              <div className="field">
-                <span className="lab">Their name</span>
-                <span className="input">Maria<span className="caret" /></span>
+              <div className="cu-row">
+                <span className="cu-lab">Theme</span>
+                <span className="cu-vals">
+                  <span className="sw selected" style={{ background: '#9c3520' }} />
+                  <span className="sw" style={{ background: '#1e6e4a' }} />
+                  <span className="sw" style={{ background: '#5878a0' }} />
+                  <span className="sw" style={{ background: '#6a5440' }} />
+                </span>
+              </div>
+              <div className="cu-row">
+                <span className="cu-lab">Text size</span>
+                <span className="text-toggle">
+                  <span>A</span><span className="active">A</span><span>A</span><span>A</span>
+                </span>
+              </div>
+              <div className="cu-row">
+                <span className="cu-lab">Safety</span>
+                <span className="cu-vals">
+                  <span className="toggle on"><span className="knob" /></span>
+                  <span className="toggle-label">Strict</span>
+                </span>
               </div>
             </div>
           </div>
           <p className="step-num">Step 02</p>
-          <h3>Name yourself and them</h3>
-          <p>Just first names. We use them in greetings and confirmations.</p>
+          <h3>Customise their experience</h3>
+          <p>Pick starting shortcuts, theme colour, element size, and safety rules. Takes about a minute.</p>
         </article>
 
         <StepArrow />
 
         <article className="step">
           <div className="step-thumb" aria-hidden="true">
-            <div className="tc tc-favs">
-              {[
-                { cls: 'ic-yt', Icon: Play, selected: true },
-                { cls: 'ic-bbc', Icon: Newspaper, selected: true },
-                { cls: 'ic-photos', Icon: Image, selected: true },
-                { cls: 'ic-mail', Icon: Envelope, selected: true },
-                { cls: 'ic-wx', Icon: Sun, selected: false },
-                { cls: 'ic-calls', Icon: VideoCamera, selected: false },
-                { cls: '', Icon: Book, selected: false, style: { background: '#a89078' } },
-                { cls: '', Icon: Globe, selected: false, style: { background: '#a89078' } },
-              ].map(({ cls, Icon, selected, style }, i) => (
-                <div className={`tc-fav${selected ? ' selected' : ''}`} key={i}>
-                  <span className={`ic${cls ? ` ${cls}` : ''}`} style={style}>
-                    <Icon weight="fill" size={13} />
-                  </span>
-                </div>
-              ))}
+            <div className="tc tc-tour">
+              <div className="tour-panel">
+                <span className="tour-btn home"><House weight="bold" size={11} /></span>
+                <span className="tour-btn"><ArrowLeft weight="bold" size={10} /></span>
+                <span className="tour-btn"><ArrowRight weight="bold" size={10} /></span>
+              </div>
+              <div className="tour-tooltip">
+                <HandPointing weight="fill" size={11} />
+                <span>Tap <b>HOME</b> to go back</span>
+              </div>
             </div>
           </div>
           <p className="step-num">Step 03</p>
-          <h3>Pick a few favourite sites</h3>
-          <p>YouTube, BBC, family photo album. Suggest 4&ndash;6. You can add more later.</p>
-        </article>
-
-        <StepArrow />
-
-        <article className="step">
-          <div className="step-thumb" aria-hidden="true">
-            <div className="tc tc-pin">
-              <div className="pin-row">
-                <div className="pin-box filled"><span className="dot" /></div>
-                <div className="pin-box filled"><span className="dot" /></div>
-                <div className="pin-box filled"><span className="dot" /></div>
-                <div className="pin-box filled"><span className="dot" /></div>
-              </div>
-              <span className="pin-lock">
-                <LockSimple weight="fill" size={12} /> Caregiver PIN set
-              </span>
-            </div>
-          </div>
-          <p className="step-num">Step 04</p>
-          <h3>Set a PIN</h3>
-          <p>A 4-digit code. Only you can change settings. They can't accidentally turn things off.</p>
+          <h3>Walk through the tutorial</h3>
+          <p>A short guided tour shows them how the helper panel works. After that, they're ready.</p>
         </article>
 
       </div>

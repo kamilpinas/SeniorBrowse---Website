@@ -7,6 +7,7 @@ import Safety from './components/Safety'
 import SetupSteps from './components/SetupSteps'
 import Pricing from './components/Pricing'
 import FAQ from './components/FAQ'
+import FinalCTA from './components/FinalCTA'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
       <SetupSteps />
       <Pricing />
       <FAQ />
+      <FinalCTA />
     </>
   )
 }

@@ -10,9 +10,10 @@ export default function Topbar() {
         <span className="brand-name">Senior<span className="br">Browse</span></span>
       </a>
       <nav className="topnav" aria-label="Primary">
-        <a href="#how" className="nav-link">How it works</a>
-        <a href="#features" className="nav-link">For families</a>
+        <a href="#see-it" className="nav-link">How it works</a>
+        <a href="#safety" className="nav-link">Safety</a>
         <a href="#pricing" className="nav-link">Pricing</a>
+        <a href="#faq" className="nav-link">FAQ</a>
         <a href="#signin" className="signin">Sign in</a>
       </nav>
     </header>

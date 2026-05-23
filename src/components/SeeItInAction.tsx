@@ -299,7 +299,7 @@ export default function SeeItInAction() {
   const vidSeconds = Math.round((progress / 100) * TOTAL)
 
   return (
-    <section className="see-it" aria-labelledby="see-h">
+    <section className="see-it" id="see-it" aria-labelledby="see-h">
       <header className="see-head">
         <p className="eyebrow-c">Try it yourself</p>
         <h2 id="see-h" className="see-h2">

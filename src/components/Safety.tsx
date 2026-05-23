@@ -1,6 +1,6 @@
 export default function Safety() {
   return (
-    <section className="safety" aria-labelledby="safety-h">
+    <section className="safety" id="safety" aria-labelledby="safety-h">
       <header className="safety-head">
         <p className="eyebrow-c">Safety &amp; Control</p>
         <h2 id="safety-h">You decide what's safe. We make sure they stay there.</h2>

@@ -29,13 +29,13 @@ export default function FinalCTA() {
           </div>
 
           <nav className="footer-c" aria-label="Footer">
-            <a href="#privacy">Privacy</a>
+            <a href="#see-it">How it works</a>
             <span aria-hidden="true">·</span>
-            <a href="#terms">Terms</a>
+            <a href="#safety">Safety</a>
             <span aria-hidden="true">·</span>
-            <a href="#contact">Contact</a>
+            <a href="#pricing">Pricing</a>
             <span aria-hidden="true">·</span>
-            <a href="#support">Support</a>
+            <a href="#faq">FAQ</a>
           </nav>
 
           <p className="footer-r">

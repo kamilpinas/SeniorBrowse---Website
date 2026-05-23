@@ -75,6 +75,9 @@ html,
 body {
   margin: 0;
 }
+html {
+  scroll-behavior: smooth;
+}
 body {
   min-height: 100vh;
   background: var(--color-bg);

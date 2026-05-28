@@ -1,9 +1,67 @@
+import { useEffect, useRef, useState } from 'react'
 import {
   Heart, Envelope, Play, Newspaper, Image, House,
   ArrowLeft, ArrowRight, HandPointing,
 } from '@phosphor-icons/react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import { useReveal } from '../hooks/useReveal'
 import { useParallax } from '../hooks/useParallax'
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+const EMAIL = 'anna@family.com'
+const SWATCHES = ['#9c3520', '#1e6e4a', '#5878a0', '#6a5440']
+const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
+
+/** Step 1 — email field types itself when the thumb enters viewport.
+ *  Closure-scoped cancelled/triggered so StrictMode's double-effect
+ *  in dev doesn't kill the animation on first mount cleanup. */
+function TrialEmail() {
+  const ref = useRef<HTMLSpanElement>(null)
+  const [typed, setTyped] = useState(EMAIL)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return
+
+    let cancelled = false
+    let triggered = false
+
+    async function run() {
+      setTyped('')
+      await sleep(400)
+      if (cancelled) return
+      let s = ''
+      for (const c of EMAIL) {
+        if (cancelled) return
+        s += c
+        setTyped(s)
+        await sleep(70 + Math.random() * 30)
+      }
+    }
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !triggered) {
+          triggered = true
+          run()
+          obs.disconnect()
+        }
+      },
+      { threshold: 0.6 },
+    )
+    obs.observe(node)
+
+    return () => {
+      cancelled = true
+      obs.disconnect()
+    }
+  }, [])
+
+  return <span ref={ref}>{typed}<span className="trial-caret" /></span>
+}
 
 function StepArrow({ idx }: { idx: number }) {
   return (
@@ -23,14 +81,69 @@ function StepArrow({ idx }: { idx: number }) {
 export default function SetupSteps() {
   const head = useReveal<HTMLElement>(0.3)
   const grid = useReveal<HTMLDivElement>(0.1)
+  const sectionRef = useRef<HTMLElement>(null)
+  const [selectedSwatch, setSelectedSwatch] = useState(0)
   // Three different parallax speeds — each thumb drifts on its own
   // plane as you scroll past, creating real depth.
   const thumb1 = useParallax<HTMLDivElement>(0.14)
   const thumb2 = useParallax<HTMLDivElement>(0.06)
   const thumb3 = useParallax<HTMLDivElement>(0.18)
 
+  // Step 2 thumb — cycle the selected theme swatch every ~1.4s when
+  // the customise thumb is in view. Stops after a full rotation.
+  useEffect(() => {
+    if (!sectionRef.current) return
+    let cycles = 0
+    let interval: ReturnType<typeof setInterval> | null = null
+    const t = sectionRef.current.querySelector('.tc-customise')
+    if (!t) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !interval) {
+          interval = setInterval(() => {
+            setSelectedSwatch(s => (s + 1) % SWATCHES.length)
+            cycles++
+            if (cycles >= SWATCHES.length * 1.5 && interval) {
+              clearInterval(interval)
+              interval = null
+            }
+          }, 1400)
+        } else if (!entry.isIntersecting && interval) {
+          clearInterval(interval)
+          interval = null
+        }
+      },
+      { threshold: 0.5 },
+    )
+    obs.observe(t)
+    return () => {
+      if (interval) clearInterval(interval)
+      obs.disconnect()
+    }
+  }, [])
+
+  // Step 3 tooltip — pops in from scale 0 with bouncy elastic ease.
+  useGSAP(
+    () => {
+      gsap.set('.tc-tour .tour-tooltip', { scale: 0, autoAlpha: 0, rotate: -15 })
+      gsap.to('.tc-tour .tour-tooltip', {
+        scale: 1,
+        autoAlpha: 1,
+        rotate: -3,
+        duration: 0.95,
+        ease: 'elastic.out(1.4, 0.5)',
+        scrollTrigger: {
+          trigger: '.tc-tour',
+          start: 'top 80%',
+          once: true,
+        },
+      })
+    },
+    { scope: sectionRef },
+  )
+
   return (
-    <section className="setup" aria-labelledby="setup-h">
+    <section ref={sectionRef} className="setup" aria-labelledby="setup-h">
       <header
         ref={head.ref}
         className={`setup-head reveal-cascade${head.shown ? ' shown' : ''}`}
@@ -57,7 +170,7 @@ export default function SetupSteps() {
               </div>
               <div className="trial-field">
                 <Envelope weight="fill" size={11} />
-                <span>anna@family.com</span>
+                <TrialEmail />
               </div>
               <div className="trial-pair">
                 <span className="pair-chip"><b>YOU</b>Anna</span>
@@ -87,10 +200,13 @@ export default function SetupSteps() {
               <div className="cu-row">
                 <span className="cu-lab">Theme</span>
                 <span className="cu-vals">
-                  <span className="sw selected" style={{ background: '#9c3520' }} />
-                  <span className="sw" style={{ background: '#1e6e4a' }} />
-                  <span className="sw" style={{ background: '#5878a0' }} />
-                  <span className="sw" style={{ background: '#6a5440' }} />
+                  {SWATCHES.map((c, i) => (
+                    <span
+                      key={c}
+                      className={`sw${i === selectedSwatch ? ' selected' : ''}`}
+                      style={{ background: c }}
+                    />
+                  ))}
                 </span>
               </div>
               <div className="cu-row">

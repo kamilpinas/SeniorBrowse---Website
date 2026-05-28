@@ -1,5 +1,6 @@
 import { PuzzlePiece } from '@phosphor-icons/react'
 import { useReveal } from '../hooks/useReveal'
+import DustParticles from './DustParticles'
 
 export default function FinalCTA() {
   const cta = useReveal<HTMLElement>()
@@ -12,6 +13,7 @@ export default function FinalCTA() {
         className={`final-cta reveal-cascade${cta.shown ? ' shown' : ''}`}
         aria-labelledby="final-cta-h"
       >
+        <DustParticles density={60} maxSize={3.5} driftY={-7} swayX={26} />
         <h2 id="final-cta-h" className="final-cta-h">
           You set it up. They just <em>browse</em>.
         </h2>

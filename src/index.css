@@ -76,29 +76,8 @@ body {
   margin: 0;
 }
 html {
-  scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
-}
-
-/* ─── Soft section snap ─────────────────────────────────────────── */
-/* Proximity snap acts like a gentle magnet — it nudges to a section
-   when the user slows down near one, but never forces. Sections keep
-   their natural heights so the page reads like a normal landing page
-   with a small assist, not a deck. */
-
-.hero,
-.problem,
-.founder-wrap,
-.see-head,
-.demo,
-.walkthrough,
-.safety,
-.setup,
-.pricing,
-.faq,
-.final-cta {
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
+  /* Lenis handles smooth scroll; native smooth fights its raf loop. */
+  scroll-behavior: auto;
 }
 body {
   min-height: 100vh;
@@ -787,6 +766,147 @@ body::before {
   margin: 0 auto;
   padding: clamp(4rem, 10vh, 8rem) clamp(1.25rem, 3vw, 3rem)
     clamp(4rem, 10vh, 8rem);
+}
+
+/* ─── Pinned founder scene (GSAP-orchestrated) ──────────────────── */
+.founder-scene {
+  position: relative;
+  z-index: 2;
+  height: 240vh;             /* scroll budget: 100vh approach + 140vh pin */
+  overflow: visible;
+}
+/* Atmospheric dust in the room — sticky so it follows during pin,
+   sits behind everything else, fades out once the letter starts. */
+.founder-dust {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  margin-bottom: -100vh; /* don't take up extra space in flow */
+  pointer-events: none;
+  z-index: 0;
+}
+.founder-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 clamp(1.25rem, 3vw, 3rem);
+}
+.founder-pin .founder {
+  position: relative;
+  z-index: 3;
+  width: min(720px, 100%);
+  /* the static rotate is overridden by GSAP — we declare it here for
+     no-JS fallback only */
+  transform: rotate(-0.4deg);
+}
+
+/* Desk props float around the pinned letter at parallax depths.
+   Absolutely positioned in viewport via fixed (during pin) -> we use
+   position: absolute on the scene and let GSAP move them. */
+.desk-prop {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: saturate(0.6) contrast(0.92);
+  color: var(--color-accent-strong);
+}
+/* Each prop has a "natural" desk position. GSAP parallax shifts each
+   prop from far above (entering) to far below (exiting) the natural
+   spot as the user scrolls through the founder scene. */
+.desk-grandma  { top: 22vh; right:  4vw; width: 170px; }
+.desk-coffee   { top: 60vh; right: 12vw; width:  90px; }
+.desk-drawing  { top: 26vh; left:   3vw; width: 160px; transform: rotate(6deg); }
+.desk-glasses  { top: 65vh; left:  10vw; width: 120px; }
+.desk-tea      { top: 12vh; left:  18vw; width: 110px; }
+.desk-knitting { top: 55vh; left:   2vw; width: 130px; transform: rotate(-4deg); }
+.desk-envelope { top: 16vh; right: 18vw; width: 140px; transform: rotate(-6deg); }
+.desk-watch    { top: 40vh; right:  2vw; width:  95px; transform: rotate(5deg); }
+
+/* Polaroid frame around the grandma portrait */
+.polaroid {
+  position: relative;
+  background: #fdf9f4;
+  padding: 14px 14px 30px;
+  box-shadow:
+    0 14px 32px -10px rgba(94, 64, 48, 0.30),
+    0 4px 10px -4px rgba(94, 64, 48, 0.18);
+  border-radius: 2px;
+}
+.polaroid-photo {
+  aspect-ratio: 5 / 6;
+  background: var(--color-accent-xlight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.polaroid-photo svg {
+  width: 78%;
+  height: 78%;
+}
+.polaroid-caption {
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--color-text-subtle);
+}
+
+/* Washi tape — small angled rectangles holding props to the "desk" */
+.washi {
+  position: absolute;
+  width: 38px;
+  height: 12px;
+  background: rgba(156, 53, 32, 0.28);
+  border: 1px dashed rgba(122, 38, 20, 0.35);
+}
+.washi-tl { top: -6px; left: -8px; transform: rotate(-18deg); }
+.washi-tr { top: -6px; right: -8px; transform: rotate(16deg); }
+.washi-bl { bottom: -6px; left: -8px; transform: rotate(15deg); }
+.washi-br { bottom: -6px; right: -8px; transform: rotate(-14deg); }
+
+.kids-drawing {
+  position: relative;
+  filter: saturate(0.85);
+}
+.kids-drawing svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-shadow:
+    0 10px 24px -8px rgba(94, 64, 48, 0.28),
+    0 3px 8px -4px rgba(94, 64, 48, 0.16);
+}
+
+.prop-coffee,
+.prop-glasses {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .founder-scene {
+    height: 220vh;
+  }
+  /* On smaller screens, keep only the four "marquee" props so the
+     scene stays readable. */
+  .desk-coffee,
+  .desk-glasses,
+  .desk-tea,
+  .desk-watch {
+    display: none;
+  }
+  .desk-grandma  { width: 130px; right: 2vw; top: 18vh; }
+  .desk-drawing  { width: 120px; left:  2vw; top: 22vh; }
+  .desk-knitting { width: 100px; left:  2vw; top: 60vh; }
+  .desk-envelope { width: 110px; right: 2vw; top: 60vh; }
 }
 .founder {
   position: relative;
@@ -2542,6 +2662,7 @@ body::before {
 }
 .tc-trial .pair-chip b { font-size: 8px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent); font-weight: var(--fw-black); flex-shrink: 0; }
 .tc-trial .pair-chip .caret { width: 1.5px; height: 10px; background: var(--color-accent); animation: caret 1s steps(2) infinite; display: inline-block; margin-left: 2px; }
+.trial-caret { display: inline-block; width: 1.2px; height: 0.85em; background: var(--color-accent); margin-left: 1.5px; vertical-align: -0.08em; animation: caret 0.55s step-end infinite; }
 
 /* Step 02 — Customise their experience */
 .tc-customise {
@@ -2555,7 +2676,8 @@ body::before {
 .tc-customise .cu-vals { display: inline-flex; align-items: center; gap: 5px; flex-wrap: nowrap; }
 .tc-customise .mini-ic { width: 14px; height: 14px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
 .tc-customise .sw { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-.tc-customise .sw.selected { outline: 1.5px solid var(--color-text); outline-offset: 1.5px; }
+.tc-customise .sw { transition: outline-color 0.4s var(--ease-out), transform 0.4s var(--ease-out); outline: 1.5px solid transparent; outline-offset: 1.5px; }
+.tc-customise .sw.selected { outline-color: var(--color-text); transform: scale(1.12); }
 .tc-customise .text-toggle {
   display: inline-flex; align-items: center;
   background: var(--color-bg);
@@ -2623,6 +2745,168 @@ body::before {
   }
 }
 
+/* ─── Dust particles ─────────────────────────────────────────────── */
+.dust-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero, .final-cta {
+  position: relative;
+}
+
+/* ─── Safety pillar — icon + numeral row ────────────────────────── */
+.pillar-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: -0.15em 0 0.25rem;
+}
+.pillar-icon {
+  display: inline-flex;
+  align-items: flex-end;
+  color: var(--color-accent);
+  /* fade in alongside the pillar; the GSAP draw fills the path strokes */
+  opacity: 1;
+}
+.pillar-icon svg {
+  width: 48px;
+  height: 48px;
+}
+
+/* ─── Hero illustration — Babcia next to her laptop ──────────────── */
+.grandma-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 2vw, 2rem);
+  z-index: 2;
+}
+.grandma-illustration {
+  position: relative;
+  width: 100%;
+  filter: drop-shadow(0 24px 48px rgba(94, 64, 48, 0.22))
+    drop-shadow(0 8px 16px rgba(94, 64, 48, 0.14));
+}
+.grandma-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Pupils follow the cursor via CSS variables written by Hero.tsx. */
+.grandma-svg .pupil {
+  transform: translate(var(--pupil-x, 0px), var(--pupil-y, 0px));
+  transform-box: fill-box;
+  transition: transform 0.35s var(--ease-out);
+  will-change: transform;
+}
+
+/* Head + hair tilt together toward the cursor. The pivot sits at
+   the base of the neck so the hair swings naturally with the head. */
+.grandma-svg .grandma-head {
+  transform: rotate(var(--head-tilt, 0deg));
+  transform-origin: 270px 320px;
+  transform-box: fill-box;
+  transition: transform 0.45s var(--ease-out);
+  will-change: transform;
+}
+
+/* Blink — both eyes, tight stagger */
+.grandma-svg .eye-grandma-l,
+.grandma-svg .eye-grandma-r {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: grandma-blink 6.5s ease-in-out infinite;
+}
+.grandma-svg .eye-grandma-r { animation-delay: 0.05s; }
+@keyframes grandma-blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  96%           { transform: scaleY(0.05); }
+  98%           { transform: scaleY(1); }
+}
+
+/* The heart on the laptop screen pulses on the brand-heartbeat
+   rhythm — the single brand pulse in the illustration. */
+.grandma-svg .laptop-heart {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: grandma-heart 3s ease-in-out infinite;
+}
+@keyframes grandma-heart {
+  0%, 100% { transform: scale(1); }
+  6%, 18%  { transform: scale(1.15); }
+  12%, 24% { transform: scale(1); }
+}
+
+/* Soft constant warm breath inside the laptop screen */
+.grandma-svg .laptop-shine {
+  animation: laptop-breath 4.5s ease-in-out infinite;
+}
+@keyframes laptop-breath {
+  0%, 100% { opacity: 0.06; }
+  50%      { opacity: 0.16; }
+}
+
+@media (max-width: 1100px) {
+  .grandma-wrap {
+    max-width: 520px;
+  }
+}
+@media (max-width: 560px) {
+  .grandma-wrap {
+    max-width: 420px;
+  }
+}
+
+/* ─── Problem section: senior-typing performance ─────────────────── */
+.problem-typed .eyebrow-c,
+.problem-typed h2,
+.problem-typed .sigh {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.75s var(--ease-out),
+    transform 0.75s var(--ease-out);
+  will-change: opacity, transform;
+}
+.problem-typed.appeared .eyebrow-c {
+  opacity: 1;
+  transform: none;
+}
+.problem-typed.appeared h2 {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.18s;
+}
+.problem-typed.sigh-in .sigh {
+  opacity: 1;
+  transform: none;
+  transition-duration: 0.9s;
+}
+
+/* Typing caret — blinks while characters are being added */
+.type-caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.92em;
+  background: var(--color-accent);
+  margin: 0 0 0 4px;
+  vertical-align: -0.08em;
+  animation: type-caret-blink 0.62s step-end infinite;
+}
+.type-caret-accent {
+  background: var(--color-accent-strong);
+}
+@keyframes type-caret-blink {
+  50% { opacity: 0; }
+}
+
 /* ─── Pricing ────────────────────────────────────────────────────── */
 .pricing {
   position: relative;
@@ -2676,6 +2960,30 @@ body::before {
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+/* Cursor-following warm glow inside the card */
+.card-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(
+    320px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(156, 53, 32, 0.16),
+    rgba(156, 53, 32, 0.04) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+  z-index: 0;
+}
+.price-card:hover .card-spotlight {
+  opacity: 1;
+}
+.price-card > *:not(.card-spotlight) {
+  position: relative;
+  z-index: 1;
 }
 
 .price-annual {

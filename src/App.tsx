@@ -9,8 +9,11 @@ import SetupSteps from './components/SetupSteps'
 import Pricing from './components/Pricing'
 import FAQ from './components/FAQ'
 import FinalCTA from './components/FinalCTA'
+import { useLenis } from './hooks/useLenis'
 
 export default function App() {
+  useLenis()
+
   return (
     <>
       <ScrollProgress />

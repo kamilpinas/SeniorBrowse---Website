@@ -12,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null)
   const illustrationRef = useRef<HTMLDivElement>(null)
+  const copyRef = useRef<HTMLDivElement>(null)
   const parallaxRef = useParallax<HTMLDivElement>(0.12)
 
   // Cursor tracking — pupils follow the mouse, head subtly tilts.
@@ -54,22 +55,34 @@ export default function Hero() {
     }
   }, [])
 
-  // Scroll-out: as user scrolls past hero, Babcia drifts down +
-  // tilts slightly and fades. The dust particles continue.
+  // Scroll-out: as user scrolls past hero, Babcia drifts down + tilts
+  // slightly and fades. The hero copy fades out on the same scroll
+  // window so the whole stage exits together.
   useGSAP(
     () => {
       if (!illustrationRef.current || !heroRef.current) return
+
+      const trigger = {
+        trigger: heroRef.current,
+        start: "bottom 85%",
+        end: "bottom 20%",
+        scrub: 1.2,
+      }
+
       gsap.to(illustrationRef.current, {
         y: 80,
         rotate: -4,
         autoAlpha: 0.15,
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "bottom 85%",
-          end: "bottom 20%",
-          scrub: 1.2,
-        },
+        scrollTrigger: trigger,
       })
+
+      if (copyRef.current) {
+        gsap.to(copyRef.current, {
+          y: 60,
+          autoAlpha: 0.15,
+          scrollTrigger: trigger,
+        })
+      }
     },
     { scope: heroRef },
   )
@@ -78,7 +91,7 @@ export default function Hero() {
     <section ref={heroRef} className="hero">
       <DustParticles density={85} maxSize={3.8} driftY={-10} swayX={26} />
 
-      <div className="hero-copy">
+      <div ref={copyRef} className="hero-copy">
         <p className="eyebrow anim-up d1">
           For the parent or grandparent you love
         </p>

@@ -1,27 +1,25 @@
 /**
- * Hero illustration — Babcia at her laptop. Flat-shape coloured style
- * with gray bun hair that moves with the head, and visible hands
- * resting on the laptop keyboard.
+ * Hero illustration — Babcia at her laptop with a caregiver standing
+ * behind and to her right, hand on her shoulder. Flat coloured-shape
+ * style throughout.
  *
  * Layer order (back → front):
  *   1. floor shadow
- *   2. body / sweater
- *   3. neck
- *   4. laptop (lid + base)
- *   5. hands on keyboard
- *   6. head group — hair, bun, face, glasses, eyes etc. (rotates as one)
+ *   2. CAREGIVER body / shoulders / neck (visible mainly on the right)
+ *   3. CAREGIVER head (right side, above/beside Babcia's bun)
+ *   4. Babcia body / sweater (covers caregiver body where they overlap)
+ *   5. Babcia neck
+ *   6. laptop
+ *   7. Babcia head + hair + bun (covers caregiver head on the left)
+ *   8. caregiver's hand on Babcia's shoulder (front)
  *
- * Animated classes:
- *  .grandma-head            → head + hair tilt toward cursor together
- *  .pupil                   → both pupils follow cursor
- *  .eye-grandma-l / -r      → blink (slight stagger)
- *  .laptop-heart            → heart pulses on brand heartbeat rhythm
- *  .laptop-shine            → soft warm glow breath behind logo
+ * The viewBox extends above zero so the caregiver's head has room
+ * to emerge.
  */
 export default function GrandmaAtComputer() {
   return (
     <svg
-      viewBox="0 0 540 480"
+      viewBox="0 -30 540 510"
       className="grandma-svg"
       aria-hidden="true"
       preserveAspectRatio="xMidYMid meet"
@@ -29,7 +27,142 @@ export default function GrandmaAtComputer() {
       {/* Floor shadow */}
       <ellipse cx="270" cy="472" rx="190" ry="6" fill="#5e4030" opacity="0.16" />
 
-      {/* ─── BODY (sweater) ─── */}
+      {/* ─── CAREGIVER body (visible on the right, partly hidden behind Babcia) ─── */}
+      <g className="caregiver-figure">
+        {/* Torso / shoulders */}
+        <path
+          d="
+            M 358 152
+            Q 380 140 422 140
+            Q 462 140 482 152
+            L 504 200
+            L 504 480
+            L 358 480 Z"
+          fill="#5e4030"
+        />
+        {/* Shirt collar — small v at the neckline */}
+        <path
+          d="M 410 142 L 422 160 L 434 142"
+          fill="none"
+          stroke="#3a2a1c"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        {/* Subtle shoulder seam */}
+        <path
+          d="M 466 152 C 478 180 488 250 490 320"
+          fill="none"
+          stroke="#3a2a1c"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          opacity="0.45"
+        />
+        {/* Caregiver neck — short, connects chin to shoulders */}
+        <path
+          d="
+            M 404 124
+            Q 404 138 414 148
+            L 434 148
+            Q 444 138 444 124
+            Q 424 132 404 124 Z"
+          fill="#fdf0eb"
+        />
+        <path
+          d="M 410 138 Q 424 142 438 138"
+          fill="none"
+          stroke="#e8c5b8"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+      </g>
+
+      {/* ─── CAREGIVER head — short boy haircut, lower position ─── */}
+      <g className="caregiver-head">
+        {/* Face */}
+        <ellipse cx="424" cy="80" rx="44" ry="50" fill="#fdf0eb" />
+
+        {/* Short boy hair — slightly tousled with a soft fringe */}
+        <path
+          d="
+            M 380 70
+            C 376 42 392 18 424 12
+            C 456 18 472 42 468 70
+            Q 462 62 452 62
+            C 446 56 438 56 434 64
+            C 430 58 422 58 418 64
+            C 414 58 406 58 402 64
+            C 398 58 392 58 386 62
+            Q 384 64 380 70 Z"
+          fill="#6b4f3a"
+        />
+        {/* Highlight strand swept across top */}
+        <path
+          d="M 402 26 C 418 16 436 18 452 28"
+          fill="none"
+          stroke="#7a5e44"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 410 36 Q 426 28 440 34"
+          fill="none"
+          stroke="#5a4030"
+          strokeWidth="2"
+          strokeLinecap="round"
+          opacity="0.55"
+        />
+        {/* Sideburn hints over the ear area */}
+        <path
+          d="M 382 72 Q 380 88 384 98"
+          fill="none"
+          stroke="#6b4f3a"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 466 72 Q 468 88 464 98"
+          fill="none"
+          stroke="#6b4f3a"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        {/* Eyebrows — slightly heavier */}
+        <path
+          d="M 397 70 Q 406 66 415 70"
+          fill="none"
+          stroke="#3a2a1c"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 433 70 Q 442 66 451 70"
+          fill="none"
+          stroke="#3a2a1c"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        {/* Eyes — pupils drawn slightly left so he naturally looks toward Babcia */}
+        <g className="eye eye-care-l">
+          <circle cx="406" cy="82" r="5.5" fill="#fdf9f4" />
+          <circle className="pupil" cx="404" cy="82" r="3" fill="#2a1c0e" />
+          <circle cx="405" cy="81" r="1" fill="#fdf9f4" />
+        </g>
+        <g className="eye eye-care-r">
+          <circle cx="442" cy="82" r="5.5" fill="#fdf9f4" />
+          <circle className="pupil" cx="440" cy="82" r="3" fill="#2a1c0e" />
+          <circle cx="441" cy="81" r="1" fill="#fdf9f4" />
+        </g>
+        {/* Small warm closed smile */}
+        <path
+          d="M 414 108 Q 424 114 434 108"
+          fill="none"
+          stroke="#7a2614"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+      </g>
+
+      {/* ─── BABCIA body (sweater) — covers caregiver body where they overlap ─── */}
       <path
         d="
           M 105 480
@@ -64,7 +197,7 @@ export default function GrandmaAtComputer() {
         strokeLinecap="round"
       />
 
-      {/* ─── NECK (smooth tapered) ─── */}
+      {/* ─── Babcia NECK ─── */}
       <path
         d="
           M 244 298
@@ -127,9 +260,9 @@ export default function GrandmaAtComputer() {
         </g>
       </g>
 
-      {/* ─── HEAD GROUP (rotates) — hair lives in here too ─── */}
+      {/* ─── GRANDMA HEAD GROUP (rotates) — covers caregiver head on the left ─── */}
       <g className="grandma-head">
-        {/* HAIR BACK — gray, framing face, ends at jaw level */}
+        {/* HAIR BACK */}
         <path
           d="
             M 152 200
@@ -142,8 +275,7 @@ export default function GrandmaAtComputer() {
             C 158 258 152 230 152 200 Z"
           fill="#c5beb5"
         />
-
-        {/* Hair highlights — silver streaks pulled up toward bun */}
+        {/* Hair highlights */}
         <path
           d="M 170 128 Q 200 92 246 74"
           fill="none"
@@ -174,8 +306,7 @@ export default function GrandmaAtComputer() {
           strokeLinecap="round"
           opacity="0.65"
         />
-
-        {/* BUN — prominent gray knot on top */}
+        {/* BUN */}
         <ellipse cx="270" cy="72" rx="46" ry="8" fill="#a8a39a" opacity="0.6" />
         <ellipse cx="270" cy="42" rx="38" ry="32" fill="#b5afa6" />
         <path
@@ -198,23 +329,13 @@ export default function GrandmaAtComputer() {
         {/* FACE */}
         <ellipse cx="270" cy="200" rx="84" ry="108" fill="#fdf0eb" />
 
-        {/* Side hair tufts on face — gray to match */}
+        {/* Side hair tufts */}
         <path
-          d="
-            M 188 188
-            Q 178 218 196 250
-            Q 202 258 204 252
-            L 204 220
-            Q 202 198 188 188 Z"
+          d="M 188 188 Q 178 218 196 250 Q 202 258 204 252 L 204 220 Q 202 198 188 188 Z"
           fill="#c5beb5"
         />
         <path
-          d="
-            M 354 188
-            Q 362 218 344 250
-            Q 338 258 336 252
-            L 336 220
-            Q 338 198 354 188 Z"
+          d="M 354 188 Q 362 218 344 250 Q 338 258 336 252 L 336 220 Q 338 198 354 188 Z"
           fill="#c5beb5"
         />
 
@@ -294,12 +415,11 @@ export default function GrandmaAtComputer() {
         {/* Nose */}
         <ellipse cx="270" cy="254" rx="6" ry="14" fill="#e8c5b8" opacity="0.55" />
 
-        {/* Mouth — small warm closed-mouth smile */}
+        {/* Mouth — small warm closed smile */}
         <path
           d="M 256 280 Q 270 275 284 280 Q 280 288 270 288 Q 260 288 256 280 Z"
           fill="#9c3520"
         />
-        {/* Subtle upper-lip line — the smile curve */}
         <path
           d="M 256 280 Q 270 276 284 280"
           fill="none"
@@ -307,6 +427,85 @@ export default function GrandmaAtComputer() {
           strokeWidth="1.4"
           strokeLinecap="round"
           opacity="0.7"
+        />
+      </g>
+
+      {/* ─── CAREGIVER hand on Babcia's shoulder (front layer) ─── */}
+      <g className="caregiver-hand">
+        {/* Sleeve cuff — wider cuff coming from caregiver's body */}
+        <path
+          d="M 360 306
+             L 428 306
+             L 422 334
+             Q 394 340 366 334 Z"
+          fill="#5e4030"
+        />
+        {/* Cuff hem line */}
+        <path
+          d="M 368 328 Q 394 334 420 328"
+          fill="none"
+          stroke="#3a2a1c"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          opacity="0.6"
+        />
+
+        {/* Hand — back of hand visible, fingers wrapping around shoulder */}
+        <path
+          d="M 366 336
+             C 362 348 368 358 380 358
+             L 412 358
+             C 422 358 426 348 422 336
+             C 412 332 380 332 366 336 Z"
+          fill="#fdf0eb"
+          stroke="#e8c5b8"
+          strokeWidth="1.5"
+        />
+        {/* Thumb — small bump on the left edge */}
+        <path
+          d="M 363 342
+             C 358 346 358 354 364 356
+             C 368 354 368 348 366 343 Z"
+          fill="#fdf0eb"
+          stroke="#e8c5b8"
+          strokeWidth="1.4"
+        />
+        {/* Knuckle ridge across the back of hand */}
+        <path
+          d="M 372 344 Q 394 340 416 344"
+          fill="none"
+          stroke="#e8c5b8"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+        />
+        {/* Four finger lines along the front edge */}
+        <path
+          d="M 380 358 Q 381 352 384 350"
+          fill="none"
+          stroke="#e8c5b8"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 391 358 Q 392 352 394 350"
+          fill="none"
+          stroke="#e8c5b8"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 402 358 Q 403 352 405 350"
+          fill="none"
+          stroke="#e8c5b8"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 412 358 Q 414 352 416 350"
+          fill="none"
+          stroke="#e8c5b8"
+          strokeWidth="1.3"
+          strokeLinecap="round"
         />
       </g>
     </svg>

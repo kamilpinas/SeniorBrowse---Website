@@ -1,4 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
 import {
   House,
   ArrowLeft,
@@ -15,25 +18,21 @@ import {
   ArrowClockwise,
   XCircle,
   Play,
-  Pause,
   MagnifyingGlass,
   Newspaper,
   Image,
   Envelope,
-  Sun,
-  VideoCamera,
   LockSimple,
   HandPointing,
   DotsThreeVertical,
   PencilSimple,
-  SidebarSimple,
-  SquaresFour,
-  ListBullets,
-  ShieldCheck,
-  CornersOut,
-  Heart,
 } from "@phosphor-icons/react"
 import { useReveal } from "../hooks/useReveal"
+import WalkthroughVideo from "./WalkthroughVideo"
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 
 type PageKey = "news" | "home" | "youtube" | "photos" | "email"
 
@@ -61,27 +60,17 @@ const VOL_COLORS = [
   "#5ca53b",
   "#56a542",
 ]
-const CAPTIONS = [
-  "Big-tile home screen — named for them.",
-  "Side panel mid-browsing — there on every page.",
-  "Caregiver admin mode — quietly configurable.",
-  "Activity log — see what they visited and saved.",
-  "Safe-site warnings — a calm pause, not an alarm.",
-  "Saved pages — straight to the caregiver's inbox.",
-]
-
-function fmt(s: number) {
-  const m = Math.floor(s / 60),
-    r = Math.floor(s % 60)
-  return `${m}:${String(r).padStart(2, "0")}`
-}
-const TOTAL = 62
-
 export default function SeeItInAction() {
   // ── scroll reveals ────────────────────────────────────────────────
   const headReveal = useReveal<HTMLElement>()
   const demoReveal = useReveal<HTMLDivElement>(0.05)
-  const walkReveal = useReveal<HTMLDivElement>(0.05)
+
+  // ── auto-demo (ghost cursor) ──────────────────────────────────────
+  const sectionRef = useRef<HTMLElement>(null)
+  const demoRootRef = useRef<HTMLDivElement | null>(null)
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const rippleRef = useRef<HTMLSpanElement>(null)
+  const autoRanRef = useRef(false)
 
   // ── demo state ────────────────────────────────────────────────────
   const [currentPage, setCurrentPage] = useState<PageKey>("news")
@@ -92,15 +81,10 @@ export default function SeeItInAction() {
   const [showSaveToast, setShowSaveToast] = useState(false)
   const [showVolumeInd, setShowVolumeInd] = useState(false)
   const [showRefreshFlash, setShowRefreshFlash] = useState(false)
-  const [tooltipDismissed, setTooltipDismissed] = useState(false)
+  const [autoPlaying, setAutoPlaying] = useState(false)
+  const [demoHint, setDemoHint] = useState<string | null>(null)
   const [scrollRatio, setScrollRatio] = useState(0)
   const [closingPage, setClosingPage] = useState<PageKey | null>(null)
-
-  // ── video state ───────────────────────────────────────────────────
-  const [playing, setPlayingState] = useState(false)
-  const [progress, setProgress] = useState(18)
-  const [ccOn, setCcOn] = useState(true)
-  const [captionText, setCaptionText] = useState(CAPTIONS[0])
 
   const historyRef = useRef<{ pages: PageKey[]; idx: number }>({
     pages: ["news"],
@@ -110,7 +94,6 @@ export default function SeeItInAction() {
   const pageRefs = useRef<Partial<Record<PageKey, HTMLDivElement | null>>>({})
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>()
   const volTimerRef = useRef<ReturnType<typeof setTimeout>>()
-  const videoTimerRef = useRef<ReturnType<typeof setInterval>>()
 
   const updateScrollRatio = useCallback(() => {
     const el = pageRefs.current[currentPageRef.current]
@@ -155,8 +138,6 @@ export default function SeeItInAction() {
     setUrlText(PAGE_URLS[page])
   }, [])
 
-  const dismissTooltip = useCallback(() => setTooltipDismissed(true), [])
-
   const flashSave = useCallback(() => {
     setShowSaveToast(true)
     clearTimeout(saveTimerRef.current)
@@ -191,7 +172,6 @@ export default function SeeItInAction() {
   // action handler
   const handleAction = useCallback(
     (action: string) => {
-      dismissTooltip()
       switch (action) {
         case "home":
           if (currentPageRef.current !== "home") navigate("home", true)
@@ -252,7 +232,6 @@ export default function SeeItInAction() {
       navigate,
       goBack,
       goForward,
-      dismissTooltip,
       flashVolume,
       flashSave,
       flashRefresh,
@@ -260,34 +239,10 @@ export default function SeeItInAction() {
     ],
   )
 
-  // video player
-  const setPlaying = useCallback((on: boolean) => {
-    setPlayingState(on)
-    clearInterval(videoTimerRef.current)
-    if (on) {
-      videoTimerRef.current = setInterval(() => {
-        setProgress((prev) => {
-          const next = Math.min(100, prev + 1.2)
-          const seg = Math.min(
-            CAPTIONS.length - 1,
-            Math.floor((next / 100) * CAPTIONS.length),
-          )
-          setCaptionText(CAPTIONS[seg])
-          if (next >= 100) {
-            setPlayingState(false)
-            clearInterval(videoTimerRef.current)
-          }
-          return next
-        })
-      }, 350)
-    }
-  }, [])
-
   useEffect(
     () => () => {
       clearTimeout(saveTimerRef.current)
       clearTimeout(volTimerRef.current)
-      clearInterval(videoTimerRef.current)
     },
     [],
   )
@@ -302,54 +257,230 @@ export default function SeeItInAction() {
         ? "Bottom"
         : `${Math.round(scrollRatio * 100)}%`
   const textScale = TEXT_SCALES[textSizeIdx]
-  const vidSeconds = Math.round((progress / 100) * TOTAL)
+
+  // Auto-demo: a ghost cursor drives the real panel when the demo
+  // first scrolls into view — moving to each button, clicking it, and
+  // letting the browser respond. Bails the moment the user touches it.
+  useGSAP(
+    () => {
+      const demo = demoRootRef.current
+      const cursor = cursorRef.current
+      if (!demo || !cursor) return
+
+      let cancelled = false
+      const onPointer = () => {
+        cancelled = true
+        setAutoPlaying(false)
+        setDemoHint(null)
+        gsap.to(cursor, { autoAlpha: 0, duration: 0.3 })
+      }
+      demo.addEventListener("pointerdown", onPointer)
+
+      const centerOf = (el: Element) => {
+        const c = demo.getBoundingClientRect()
+        const r = el.getBoundingClientRect()
+        return { x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2 }
+      }
+      const tween = (vars: gsap.TweenVars) =>
+        new Promise<void>((res) => {
+          gsap.to(cursor, { ...vars, onComplete: res })
+        })
+
+      const moveTo = async (sel: string) => {
+        const el = demo.querySelector(sel)
+        if (!el) return
+        const { x, y } = centerOf(el)
+        await tween({ x, y, duration: 0.85, ease: "power3.inOut" })
+      }
+      const ripple = () => {
+        const ring = rippleRef.current
+        if (!ring) return
+        gsap.fromTo(
+          ring,
+          { autoAlpha: 0.55, scale: 0.2 },
+          { autoAlpha: 0, scale: 1.7, duration: 0.55, ease: "power2.out" },
+        )
+      }
+      const clickEl = async (sel: string) => {
+        const el = demo.querySelector(sel) as HTMLElement | null
+        if (!el) return
+        await tween({ scale: 0.7, duration: 0.12, ease: "power2.in" })
+        ripple()
+        el.click()
+        await tween({ scale: 1, duration: 0.32, ease: "back.out(2.6)" })
+      }
+
+      // Quietly return the demo to its opening state between loops.
+      const resetDemo = () => {
+        setTextSizeIdx(0)
+        historyRef.current = { pages: ["news"], idx: 0 }
+        currentPageRef.current = "news"
+        setCurrentPage("news")
+        setUrlText(PAGE_URLS.news)
+        const el = pageRefs.current.news
+        if (el) el.scrollTop = 0
+        setScrollRatio(0)
+      }
+
+      const run = async () => {
+        const rect = demo.getBoundingClientRect()
+        gsap.set(cursor, {
+          x: rect.width * 0.52,
+          y: rect.height * 0.62,
+          scale: 1,
+          autoAlpha: 0,
+        })
+        setAutoPlaying(true)
+        await sleep(600)
+        if (cancelled) return
+        await tween({ autoAlpha: 1, duration: 0.3 })
+
+        // Each step: show a caption, move the cursor, click, pause so
+        // the user can read what just happened, then move on.
+        const step = async (
+          hint: string,
+          act: () => Promise<void>,
+          pause = 950,
+        ) => {
+          if (cancelled) return
+          setDemoHint(hint)
+          await act()
+          await sleep(pause)
+        }
+
+        // Loop the tour until the user takes over.
+        while (!cancelled) {
+          resetDemo()
+          await sleep(800)
+          if (cancelled) break
+
+          await step("Tapping HOME to go back", async () => {
+            await moveTo('[data-action="home"]')
+            await clickEl('[data-action="home"]')
+          })
+          await step("Opening a favourite — YouTube", async () => {
+            await moveTo(".ho-tile")
+            await clickEl(".ho-tile")
+          })
+          await step(
+            "Making the words bigger",
+            async () => {
+              await moveTo('[data-action="text-size"]')
+              await clickEl('[data-action="text-size"]')
+              await sleep(550)
+              await clickEl('[data-action="text-size"]')
+            },
+            1100,
+          )
+          await step("Scrolling down the page", async () => {
+            await moveTo('[data-action="down"]')
+            await clickEl('[data-action="down"]')
+          })
+          await step(
+            "Saving it — straight to the family's inbox",
+            async () => {
+              await moveTo('[data-action="save"]')
+              await clickEl('[data-action="save"]')
+            },
+            1800,
+          )
+          await step(
+            "Back to the calm home screen",
+            async () => {
+              await moveTo('[data-action="home"]')
+              await clickEl('[data-action="home"]')
+            },
+            700,
+          )
+
+          if (cancelled) break
+          setDemoHint("That's it — now you try, or watch again")
+          await sleep(1700)
+        }
+      }
+
+      const st = ScrollTrigger.create({
+        trigger: demo,
+        start: "top 62%",
+        once: true,
+        onEnter: () => {
+          if (autoRanRef.current) return
+          autoRanRef.current = true
+          void run()
+        },
+      })
+
+      return () => {
+        demo.removeEventListener("pointerdown", onPointer)
+        st.kill()
+      }
+    },
+    { scope: sectionRef },
+  )
 
   return (
-    <section className="see-it" id="see-it" aria-labelledby="see-h">
+    <section ref={sectionRef} className="see-it" id="see-it" aria-labelledby="see-h">
       <header
         ref={headReveal.ref}
         className={`see-head reveal-cascade${headReveal.shown ? " shown" : ""}`}
       >
-        <p className="eyebrow-c">Try it yourself</p>
+        <p className="eyebrow-c">See it in action</p>
         <h2 id="see-h" className="see-h2">
-          The side panel does <em>the work</em>.
+          Watch the side panel do <em>the work</em>.
         </h2>
         <p className="see-sub">
-          This is the actual side panel. Click any button.
+          This is the real panel — it'll play itself. Jump in any time and try.
         </p>
       </header>
 
       {/* ── Interactive Demo ── */}
       <div
-        ref={demoReveal.ref}
-        className={`demo reveal zoom${demoReveal.shown ? " shown" : ""}`}
+        ref={(el) => {
+          demoReveal.ref.current = el
+          demoRootRef.current = el
+        }}
+        className={`demo reveal zoom${demoReveal.shown ? " shown" : ""}${autoPlaying ? " auto-playing" : ""}`}
         id="demo"
       >
-        <div className={`demo-tooltip${tooltipDismissed ? " fade" : ""}`}>
+        {/* Ghost cursor — driven by GSAP during the auto-demo */}
+        <div ref={cursorRef} className="demo-cursor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26">
+            <path
+              d="M5 3 L5 19 L9 15 L12 21 L15 20 L12 14 L18 14 Z"
+              fill="#fff"
+              stroke="#7a2614"
+              strokeWidth="1.4"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span ref={rippleRef} className="demo-cursor-ripple" />
+        </div>
+
+        {/* Live caption — appears/disappears with each auto-demo action */}
+        <div className={`demo-hint${demoHint ? " show" : ""}`} aria-live="polite">
+          {demoHint}
+        </div>
+
+        {/* "Take over" prompt — pulses during auto-play, vanishes on click */}
+        <div className={`demo-tooltip${autoPlaying ? "" : " fade"}`}>
           <HandPointing
             weight="fill"
             size={18}
             className="hand"
             aria-hidden="true"
           />
-          Try clicking <strong>HOME</strong>
+          Click anywhere to <strong>try it yourself</strong>
         </div>
-        <svg
-          className={`demo-arrow${tooltipDismissed ? " fade" : ""}`}
-          viewBox="0 0 90 70"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeDasharray="3 5"
-          aria-hidden="true"
-        >
-          <path d="M5 4 C 30 8, 55 26, 76 56" />
-          <path d="M68 50 L 76 56 L 70 62" strokeDasharray="0" />
-        </svg>
 
         <div className="demo-window">
+          {/* LIVE badge — shown while the auto-demo is running */}
+          <span
+            className={`demo-live${autoPlaying ? " show" : ""}`}
+            aria-hidden="true"
+          >
+            <span className="demo-live-dot" />
+            LIVE DEMO
+          </span>
           <div className="demo-titlebar">
             <div className="lights">
               <span className="light r" />
@@ -524,10 +655,7 @@ export default function SeeItInAction() {
                       key={page}
                       className="ho-tile"
                       type="button"
-                      onClick={() => {
-                        dismissTooltip()
-                        navigate(page, true)
-                      }}
+                      onClick={() => navigate(page, true)}
                     >
                       <span className={`icon ${cls}`}>
                         <Icon weight="fill" size={36} />
@@ -681,7 +809,7 @@ export default function SeeItInAction() {
                     {
                       av: "A",
                       cls: "",
-                      from: "Anna (your daughter)",
+                      from: "Anna",
                       subject:
                         "Lovely photos from Sunday — also Tom said hi xx",
                       time: "9:14 am",
@@ -690,7 +818,7 @@ export default function SeeItInAction() {
                     {
                       av: "T",
                       cls: "a3",
-                      from: "Tom (your grandson)",
+                      from: "Tom",
                       subject: "Maths homework — can I ring you later?",
                       time: "Yesterday",
                       unread: true,
@@ -1060,133 +1188,8 @@ export default function SeeItInAction() {
         </div>
       </div>
 
-      {/* ── Walkthrough video ── */}
-      <div
-        ref={walkReveal.ref}
-        className={`walkthrough reveal from-right${walkReveal.shown ? " shown" : ""}`}
-      >
-        <p className="walk-eyebrow">The 60-second walkthrough</p>
-        <h3 className="walk-h3">
-          See SeniorBrowse on <em>your parent's</em> screen.
-        </h3>
-
-        <div className="video-frame">
-          <div className="video-stage">
-            <div className="poster" aria-hidden="true">
-              <div className="poster-head">
-                <span className="poster-eyebrow">SeniorBrowse</span>
-                <span className="poster-mark">
-                  <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                    <rect
-                      x="8"
-                      y="12"
-                      width="48"
-                      height="42"
-                      rx="5"
-                      fill="#fff"
-                    />
-                    <line
-                      x1="8"
-                      y1="22"
-                      x2="56"
-                      y2="22"
-                      stroke="#9c3520"
-                      strokeWidth="1.5"
-                    />
-                    <circle cx="13" cy="17" r="1.4" fill="#9c3520" />
-                    <circle cx="18" cy="17" r="1.4" fill="#9c3520" />
-                    <circle cx="23" cy="17" r="1.4" fill="#9c3520" />
-                    <path
-                      d="M32 31 C 28 26, 21 28, 21 34 C 21 40, 32 47, 32 47 C 32 47, 43 40, 43 34 C 43 28, 36 26, 32 31 Z"
-                      fill="#9c3520"
-                    />
-                  </svg>
-                </span>
-              </div>
-              <div className="poster-body">
-                <h2 className="poster-title">
-                  <span className="line-1">The internet,</span>
-                  <span className="line-2">finally easy.</span>
-                </h2>
-                <p className="poster-sub">
-                  A Chrome extension that turns the web into something the
-                  people you love can actually use.
-                </p>
-              </div>
-              <div className="poster-foot">
-                <span>SeniorBrowse.com</span>
-                <span>01 / 06</span>
-              </div>
-            </div>
-
-            <button
-              className="play-badge"
-              aria-label={playing ? "Pause walkthrough" : "Play walkthrough"}
-              style={{
-                opacity: playing ? 0 : 1,
-                pointerEvents: playing ? "none" : "auto",
-              }}
-              onClick={() => setPlaying(true)}
-            >
-              <Play weight="fill" size={42} aria-hidden="true" />
-            </button>
-
-            {ccOn && <div className="caption-box">{captionText}</div>}
-          </div>
-
-          <div className="video-controls">
-            <button
-              className="vc-btn"
-              onClick={() => setPlaying(!playing)}
-              aria-label={playing ? "Pause" : "Play"}
-            >
-              {playing ? (
-                <Pause weight="fill" size={16} />
-              ) : (
-                <Play weight="fill" size={16} />
-              )}
-            </button>
-            <div className="vc-progress">
-              <div className="vc-bar" style={{ width: `${progress}%` }} />
-            </div>
-            <span className="vc-time">
-              {fmt(vidSeconds)} / {fmt(TOTAL)}
-            </span>
-            <button
-              className="vc-cc"
-              aria-pressed={ccOn}
-              aria-label="Captions"
-              onClick={() => setCcOn((c) => !c)}
-            >
-              CC
-            </button>
-            <button className="vc-fs" aria-label="Fullscreen">
-              <CornersOut weight="bold" size={16} />
-            </button>
-          </div>
-        </div>
-
-        <div className="what-list">
-          <p className="what-title">What you'll see</p>
-          <ul>
-            {[
-              { Icon: SquaresFour, text: "Big-tile home screen." },
-              { Icon: SidebarSimple, text: "Side panel mid-browsing." },
-              { Icon: PencilSimple, text: "Caregiver admin mode." },
-              { Icon: ListBullets, text: "Activity log review." },
-              { Icon: ShieldCheck, text: "Safe-site warnings." },
-              { Icon: BookmarkSimple, text: "Saved pages → caregiver inbox." },
-            ].map(({ Icon, text }) => (
-              <li key={text}>
-                <span className="marker" aria-hidden="true">
-                  <Icon weight="fill" size={15} />
-                </span>
-                {text}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      {/* ── Walkthrough video (animated time-lapse montage) ── */}
+      <WalkthroughVideo />
     </section>
   )
 }

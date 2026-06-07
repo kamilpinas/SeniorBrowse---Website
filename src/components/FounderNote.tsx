@@ -12,7 +12,6 @@ import TeaCup from './desk/TeaCup'
 import Knitting from './desk/Knitting'
 import LetterEnvelope from './desk/LetterEnvelope'
 import PocketWatch from './desk/PocketWatch'
-import DustParticles from './DustParticles'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -53,11 +52,19 @@ export default function FounderNote() {
         },
       })
 
-      // 1. Card breathes in during the approach (0 → 0.12)
+      // 1. Card swings into place — like a note being pinned to the
+      //    wall and settling. Elastic-out gives the pendulum overshoot
+      //    so it rocks past -0.4° before resting there.
       tl.fromTo(
         cardRef.current,
-        { autoAlpha: 0, y: 80, rotate: -3.5 },
-        { autoAlpha: 1, y: 0, rotate: -0.4, ease: 'power2.out', duration: 0.12 },
+        { autoAlpha: 0, y: 90, rotate: -7 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          rotate: -0.4,
+          ease: 'elastic.out(0.9, 0.45)',
+          duration: 0.18,
+        },
         0,
       )
 
@@ -84,12 +91,18 @@ export default function FounderNote() {
         0.54,
       )
 
-      // 4. Signature fades in (0.74 → 0.89)
+      // 4. Sign-off + signature fade in (0.72 → 0.89)
+      tl.fromTo(
+        '.letter-signoff',
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, ease: 'power2.out', duration: 0.12 },
+        0.72,
+      )
       tl.fromTo(
         '.signature .name-img',
         { opacity: 0, y: 20, scale: 0.95 },
         { opacity: 1, y: 0, scale: 1, ease: 'power2.out', duration: 0.15 },
-        0.74,
+        0.78,
       )
 
       // 5. Card tilts away on exit (0.90 → 1.0)
@@ -97,13 +110,6 @@ export default function FounderNote() {
         cardRef.current,
         { y: -60, rotate: -1.6, autoAlpha: 0.95, ease: 'power2.in', duration: 0.10 },
         0.90,
-      )
-
-      // Atmospheric dust fades as the room "fills" with the letter.
-      tl.to(
-        '.founder-dust',
-        { opacity: 0, ease: 'power2.out', duration: 0.18 },
-        0.18,
       )
 
       // ── Desk props — each appears at its OWN moment in the timeline,
@@ -158,11 +164,6 @@ export default function FounderNote() {
       className="founder-scene"
       aria-labelledby="founder-h"
     >
-      {/* Atmospheric dust in the room, fades out as the letter reveals */}
-      <div className="founder-dust" aria-hidden="true">
-        <DustParticles density={40} maxSize={3.2} driftY={-5} swayX={22} />
-      </div>
-
       {/* Sticky pin canvas — card stays centred while scene scrolls.
           Desk props live INSIDE the pin so they remain in viewport
           for the whole reading window. */}
@@ -195,6 +196,10 @@ export default function FounderNote() {
         </div>
 
         <article ref={cardRef} className="founder">
+          {/* Thumbtacks holding the note to the "wall" */}
+          <span className="founder-tack founder-tack-l" aria-hidden="true" />
+          <span className="founder-tack founder-tack-r" aria-hidden="true" />
+
           <header className="letterhead">
             <span className="letterhead-l">
               <span className="mk" aria-hidden="true">
@@ -202,10 +207,10 @@ export default function FounderNote() {
               </span>
               A note from the founder
             </span>
-            <span className="letterhead-r">For Babcia.</span>
+            <span className="letterhead-r">Written for Babcia</span>
           </header>
 
-          <h2 id="founder-h">Why I Built This</h2>
+          <h2 id="founder-h" className="letter-greeting">Dear friend,</h2>
 
           <div className="founder-body">
             <p>My grandmother told me more than once that the internet wasn't made for people like her.</p>
@@ -217,8 +222,16 @@ export default function FounderNote() {
             <p>Because it should be. For everyone.</p>
           </div>
 
+          <p className="letter-signoff">With love — and a little stubbornness,</p>
+
           <p className="signature">
-            <img className="name-img" src={signatureImg} alt="Kamil Pinas" />
+            <img
+              className="name-img"
+              src={signatureImg}
+              alt="Kamil Pinas"
+              loading="lazy"
+              decoding="async"
+            />
           </p>
         </article>
       </div>

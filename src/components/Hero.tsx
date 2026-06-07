@@ -4,7 +4,6 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { useParallax } from "../hooks/useParallax"
-import DustParticles from "./DustParticles"
 import GrandmaAtComputer from "./hero/GrandmaAtComputer"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
@@ -71,7 +70,6 @@ export default function Hero() {
 
       gsap.to(illustrationRef.current, {
         y: 80,
-        rotate: -4,
         autoAlpha: 0.15,
         scrollTrigger: trigger,
       })
@@ -89,11 +87,9 @@ export default function Hero() {
 
   return (
     <section ref={heroRef} className="hero">
-      <DustParticles density={85} maxSize={3.8} driftY={-10} swayX={26} />
-
       <div ref={copyRef} className="hero-copy">
         <p className="eyebrow anim-up d1">
-          For the parent or grandparent you love
+          For the senior you're helping
         </p>
 
         <h1 className="hero-h1 anim-up d2">
@@ -117,7 +113,7 @@ export default function Hero() {
           <div className="cta-meta">
             <span className="meta-1">7 days free</span>
             <span className="meta-2">
-              No card required · Works with Chrome &amp; Edge
+              No card required · Works with any browser
             </span>
           </div>
         </div>

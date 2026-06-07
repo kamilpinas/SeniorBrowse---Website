@@ -1,6 +1,6 @@
 import { PuzzlePiece } from '@phosphor-icons/react'
 import { useReveal } from '../hooks/useReveal'
-import DustParticles from './DustParticles'
+import FamilyCall from './hero/FamilyCall'
 
 export default function FinalCTA() {
   const cta = useReveal<HTMLElement>()
@@ -13,16 +13,19 @@ export default function FinalCTA() {
         className={`final-cta reveal-cascade${cta.shown ? ' shown' : ''}`}
         aria-labelledby="final-cta-h"
       >
-        <DustParticles density={60} maxSize={3.5} driftY={-7} swayX={26} />
+        <FamilyCall />
+
+        <p className="final-cta-eyebrow">And then — they're back in</p>
         <h2 id="final-cta-h" className="final-cta-h">
-          You set it up. They just <em>browse</em>.
+          Hold the door <em>open</em> for them.
         </h2>
         <p className="final-cta-sub">
-          Try SeniorBrowse free for 7 days. Cancel any time.
+          You set it up once. They get the people they love, the news they
+          follow, the photos they've been missing — without the struggle.
         </p>
         <a href="#install" className="btn-primary btn-xl">
           <PuzzlePiece weight="bold" size={26} aria-hidden="true" />
-          Add to Chrome — 7 days free
+          Add to Browser — 7 days free
         </a>
         <p className="final-cta-note">
           No card. No commitment. Done in 5 minutes.
@@ -52,7 +55,7 @@ export default function FinalCTA() {
           </nav>
 
           <p className="footer-r">
-            Built for grandmothers, by their grandchildren.
+            Built for the people we care for.
           </p>
         </div>
       </footer>

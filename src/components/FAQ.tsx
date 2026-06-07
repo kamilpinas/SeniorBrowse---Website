@@ -3,12 +3,12 @@ import { useReveal } from '../hooks/useReveal'
 
 const FAQS = [
   {
-    q: 'Will my parent need to learn anything new?',
+    q: 'Will the senior need to learn anything new?',
     a: 'After you set it up, they see one screen: their home page with a few big tiles. The side panel does everything else. No menus, no toolbars, no learning curve.',
   },
   {
-    q: 'What if they already use Chrome — will it break their bookmarks?',
-    a: 'No. SeniorBrowse installs as an extension. Their existing bookmarks, saved passwords, and history stay exactly where they are. You can choose to show or hide the regular Chrome interface.',
+    q: 'What if they already have a browser set up — will it break their bookmarks?',
+    a: 'No. SeniorBrowse installs as an extension. Their existing bookmarks, saved passwords, and history stay exactly where they are. You can choose to show or hide the regular browser interface.',
   },
   {
     q: "Can I see what they've been browsing?",
@@ -16,15 +16,15 @@ const FAQS = [
   },
   {
     q: 'Is their browsing data private? Do you track them?',
-    a: "The browsing history stays on your parent's computer — it's stored locally and never leaves the machine. Our servers see only your email and license status. We don't analyse, sell, or look at their browsing.",
+    a: "The browsing history stays on the senior's computer — it's stored locally and never leaves the machine. Our servers see only your email and license status. We don't analyse, sell, or look at their browsing.",
   },
   {
-    q: 'Does it work on Mac, Windows, and Chromebook?',
-    a: 'Yes. Anywhere Google Chrome runs, SeniorBrowse runs.',
+    q: 'Does it work on their computer?',
+    a: 'Yes — on Mac, Windows, or any modern computer. Anywhere a modern browser runs, SeniorBrowse runs.',
   },
   {
     q: 'Can I install it on their computer remotely?',
-    a: 'Yes, if they let you log into their computer over a video call or remote desktop session. Setup is just clicking "Add to Chrome" and following the wizard — you can do it for them in five minutes.',
+    a: 'Yes, if they let you log into their computer over a video call or remote desktop session. Setup is just clicking "Add to Browser" and following the wizard — you can do it for them in five minutes.',
   },
   {
     q: 'What happens after the 7-day trial?',
@@ -32,7 +32,7 @@ const FAQS = [
   },
   {
     q: "What if they decide they don't like it?",
-    a: 'You can uninstall the extension at any time — their normal Chrome comes back exactly as it was. The subscription cancels any time from your account page.',
+    a: 'You can uninstall the extension at any time — their normal browser comes back exactly as it was. The subscription cancels any time from your account page.',
   },
 ]
 

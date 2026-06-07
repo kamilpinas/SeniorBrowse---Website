@@ -1,7 +1,7 @@
 import ScrollProgress from './components/ScrollProgress'
 import Topbar from './components/Topbar'
 import Hero from './components/Hero'
-import Problem from './components/Problem'
+import BeforeAfter from './components/BeforeAfter'
 import FounderNote from './components/FounderNote'
 import SeeItInAction from './components/SeeItInAction'
 import Safety from './components/Safety'
@@ -19,13 +19,13 @@ export default function App() {
       <ScrollProgress />
       <Topbar />
       <Hero />
-      <Problem />
-      <FounderNote />
       <SeeItInAction />
+      <BeforeAfter />
+      <FounderNote />
       <Safety />
       <SetupSteps />
-      <Pricing />
       <FAQ />
+      <Pricing />
       <FinalCTA />
     </>
   )

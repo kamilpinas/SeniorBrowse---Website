@@ -83,31 +83,32 @@ export default function SetupSteps() {
   const grid = useReveal<HTMLDivElement>(0.1)
   const sectionRef = useRef<HTMLElement>(null)
   const [selectedSwatch, setSelectedSwatch] = useState(0)
+  const [textIdx, setTextIdx] = useState(1)
+  const [safetyOn, setSafetyOn] = useState(true)
   // Three different parallax speeds — each thumb drifts on its own
   // plane as you scroll past, creating real depth.
   const thumb1 = useParallax<HTMLDivElement>(0.14)
   const thumb2 = useParallax<HTMLDivElement>(0.06)
   const thumb3 = useParallax<HTMLDivElement>(0.18)
 
-  // Step 2 thumb — cycle the selected theme swatch every ~1.4s when
-  // the customise thumb is in view. Stops after a full rotation.
+  // Step 2 thumb — keep the controls alive while in view: the theme
+  // swatch cycles, the text-size selection steps along, and the safety
+  // toggle flips. Loops continuously while visible, pauses off-screen.
   useEffect(() => {
     if (!sectionRef.current) return
-    let cycles = 0
     let interval: ReturnType<typeof setInterval> | null = null
+    let tick = 0
     const t = sectionRef.current.querySelector('.tc-customise')
     if (!t) return
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !interval) {
           interval = setInterval(() => {
+            tick++
             setSelectedSwatch(s => (s + 1) % SWATCHES.length)
-            cycles++
-            if (cycles >= SWATCHES.length * 1.5 && interval) {
-              clearInterval(interval)
-              interval = null
-            }
-          }, 1400)
+            setTextIdx(i => (i + 1) % 4)
+            if (tick % 2 === 0) setSafetyOn(s => !s)
+          }, 1150)
         } else if (!entry.isIntersecting && interval) {
           clearInterval(interval)
           interval = null
@@ -122,20 +123,39 @@ export default function SetupSteps() {
     }
   }, [])
 
-  // Step 3 tooltip — pops in from scale 0 with bouncy elastic ease.
+  // Step 3 thumb — tooltip pops in, then keeps living: it bobs gently
+  // and the HOME button taps itself on a loop, as if being demoed.
   useGSAP(
     () => {
-      gsap.set('.tc-tour .tour-tooltip', { scale: 0, autoAlpha: 0, rotate: -15 })
-      gsap.to('.tc-tour .tour-tooltip', {
-        scale: 1,
-        autoAlpha: 1,
-        rotate: -3,
-        duration: 0.95,
-        ease: 'elastic.out(1.4, 0.5)',
-        scrollTrigger: {
-          trigger: '.tc-tour',
-          start: 'top 80%',
-          once: true,
+      const tip = '.tc-tour .tour-tooltip'
+      const home = '.tc-tour .tour-btn.home'
+      gsap.set(tip, { scale: 0, autoAlpha: 0, rotate: -15 })
+
+      ScrollTrigger.create({
+        trigger: '.tc-tour',
+        start: 'top 80%',
+        once: true,
+        onEnter: () => {
+          gsap.to(tip, {
+            scale: 1,
+            autoAlpha: 1,
+            rotate: -3,
+            duration: 0.9,
+            ease: 'elastic.out(1.4, 0.5)',
+          })
+          // gentle continuous bob after it lands
+          gsap.to(tip, {
+            y: -4,
+            duration: 1.3,
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: -1,
+            delay: 0.9,
+          })
+          // HOME taps itself on a loop
+          const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.1, delay: 1.2 })
+          tl.to(home, { scale: 0.84, duration: 0.16, ease: 'power2.in' })
+          tl.to(home, { scale: 1, duration: 0.55, ease: 'elastic.out(1.3, 0.4)' })
         },
       })
     },
@@ -180,7 +200,7 @@ export default function SetupSteps() {
           </div>
           <p className="step-num">Step 01</p>
           <h3>Install &amp; start trial</h3>
-          <p>Add to Browser, drop in your email, and name the caregiver and the senior. Free 7-day trial begins right away.</p>
+          <p>Add to your browser, drop in your email, and name the caregiver and the senior. Free 7-day trial begins right away.</p>
         </article>
 
         <StepArrow idx={1} />
@@ -212,14 +232,16 @@ export default function SetupSteps() {
               <div className="cu-row">
                 <span className="cu-lab">Text size</span>
                 <span className="text-toggle">
-                  <span>A</span><span className="active">A</span><span>A</span><span>A</span>
+                  {[0, 1, 2, 3].map(i => (
+                    <span key={i} className={i === textIdx ? 'active' : ''}>A</span>
+                  ))}
                 </span>
               </div>
               <div className="cu-row">
                 <span className="cu-lab">Safety</span>
                 <span className="cu-vals">
-                  <span className="toggle on"><span className="knob" /></span>
-                  <span className="toggle-label">Strict</span>
+                  <span className={`toggle${safetyOn ? ' on' : ''}`}><span className="knob" /></span>
+                  <span className="toggle-label">{safetyOn ? 'Strict' : 'Standard'}</span>
                 </span>
               </div>
             </div>

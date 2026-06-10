@@ -163,7 +163,7 @@ export default function SetupSteps() {
   )
 
   return (
-    <section ref={sectionRef} className="setup" aria-labelledby="setup-h">
+    <section ref={sectionRef} className="setup" id="install" aria-labelledby="setup-h">
       <header
         ref={head.ref}
         className={`setup-head reveal-cascade${head.shown ? ' shown' : ''}`}

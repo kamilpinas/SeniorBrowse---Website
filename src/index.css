@@ -173,8 +173,14 @@ body::before {
 .topnav a:hover {
   color: var(--color-accent);
 }
-.topnav .signin {
-  color: var(--color-text);
+.topnav .btn-nav {
+  padding: 0.6rem 1.1rem;
+  font-size: 0.92rem;
+  gap: 0.45rem;
+  color: #fff;
+}
+.topnav .btn-nav:hover {
+  color: #fff;
 }
 @media (max-width: 720px) {
   .topnav .nav-link {

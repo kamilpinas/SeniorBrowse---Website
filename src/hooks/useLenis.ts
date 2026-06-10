@@ -50,9 +50,37 @@ export function useLenis() {
     const registerId = window.setTimeout(() => {
       ScrollTrigger.refresh()
       const sections = document.querySelectorAll<HTMLElement>(SNAP_SELECTOR)
-      removers = Array.from(sections).map((el) =>
-        snap.addElement(el, { align: 'start' }),
-      )
+      removers = Array.from(sections).map((el) => {
+        // The hero snaps to the absolute top of the page (scroll 0) so
+        // settling there never tucks the navbar out of view. Every
+        // other section snaps a little lower — past most of its own
+        // top padding — so the settle centres the content instead of
+        // leaving a band of padding at the top with the content cut
+        // off below. Snap has no offset option, so each section gets
+        // an invisible marker placed where its top should land (all
+        // sections are position: relative).
+        if (el.classList.contains('hero')) {
+          return snap.add(0)
+        }
+        const padTop = parseFloat(getComputedStyle(el).paddingTop) || 0
+        const offset = Math.max(0, padTop - 28)
+        const marker = document.createElement('span')
+        marker.style.cssText = `position:absolute;top:${offset}px;left:0;width:1px;height:1px;visibility:hidden;pointer-events:none;`
+        el.appendChild(marker)
+        const removeSnap = snap.addElement(marker, { align: 'start' })
+        return () => {
+          removeSnap()
+          marker.remove()
+        }
+      })
+
+      // Settling near the end of the page rests at the very bottom
+      // (footer fully in view) instead of being pulled back up to the
+      // final CTA's snap point.
+      const footer = document.querySelector<HTMLElement>('.site-footer')
+      if (footer) {
+        removers.push(snap.addElement(footer, { align: 'end' }))
+      }
     }, 300)
 
     return () => {

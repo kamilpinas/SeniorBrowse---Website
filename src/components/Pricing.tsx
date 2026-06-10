@@ -165,7 +165,7 @@ export default function Pricing() {
         className={`pricing-head reveal-cascade${head.shown ? ' shown' : ''}`}
       >
         <p className="eyebrow-c">Pricing</p>
-        <h2 id="pricing-h">One simple price.</h2>
+        <h2 id="pricing-h">One <em>simple</em> price.</h2>
         <p className="pricing-sub">
           Try it free for 7 days. Decide if it's worth it. No card needed to start.
         </p>

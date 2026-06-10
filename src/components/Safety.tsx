@@ -177,7 +177,7 @@ export default function Safety() {
         className={`safety-head reveal-cascade${head.shown ? ' shown' : ''}`}
       >
         <p className="eyebrow-c">Safety &amp; Control</p>
-        <h2 id="safety-h">You decide what's safe. We make sure they stay there.</h2>
+        <h2 id="safety-h">You decide what's <em>safe</em>. We make sure they stay there.</h2>
         <p className="subhead">Four protections built in. None of them require you to think about it after setup.</p>
       </header>
 

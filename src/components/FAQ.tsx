@@ -47,7 +47,7 @@ export default function FAQ() {
         className={`faq-head reveal-cascade${head.shown ? ' shown' : ''}`}
       >
         <p className="eyebrow-c">Common questions</p>
-        <h2 id="faq-h">Questions caregivers actually ask.</h2>
+        <h2 id="faq-h">Questions caregivers <em>actually</em> ask.</h2>
       </header>
 
       <div

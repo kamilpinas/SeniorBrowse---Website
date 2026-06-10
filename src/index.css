@@ -3836,6 +3836,14 @@ body::before {
   color: var(--color-text);
   text-wrap: balance;
 }
+.pricing-head h2 em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-accent);
+  position: relative;
+  top: 0.04em;
+}
 .pricing-sub {
   margin: 0 auto;
   font-size: clamp(1.05rem, 1.3vw, 1.25rem);
@@ -4092,6 +4100,14 @@ body::before {
   letter-spacing: -0.035em;
   color: var(--color-text);
   text-wrap: balance;
+}
+.faq-head h2 em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-accent);
+  position: relative;
+  top: 0.04em;
 }
 
 .faq-list {

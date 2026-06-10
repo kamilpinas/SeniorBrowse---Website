@@ -752,6 +752,23 @@ body::before {
     top: 60vh;
   }
 }
+@media (max-width: 720px) {
+  /* On phones the letter is taller than the viewport, so the pinned
+     scene would clip the letterhead and sign-off. Un-pin it and show
+     the letter as a normal scrolling section (the scrubbed timeline
+     is disabled at this width in FounderNote.tsx too). */
+  .founder-scene {
+    height: auto;
+  }
+  .founder-pin {
+    position: static;
+    height: auto;
+    padding: clamp(4rem, 10vh, 6rem) 1.25rem;
+  }
+  .desk-prop {
+    display: none;
+  }
+}
 .founder {
   position: relative;
   max-width: 760px;

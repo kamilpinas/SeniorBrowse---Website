@@ -1192,7 +1192,7 @@ body::before {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 288px;
   background: var(--color-bg);
-  height: 760px;
+  height: 660px;
   min-height: 0;
 }
 .fake-page {
@@ -3156,9 +3156,15 @@ body::before {
   background: var(--color-surface-edge);
   opacity: 0.7;
 }
-.nd-line.w1 { width: 78%; }
-.nd-line.w2 { width: 94%; }
-.nd-line.w3 { width: 62%; }
+.nd-line.w1 {
+  width: 78%;
+}
+.nd-line.w2 {
+  width: 94%;
+}
+.nd-line.w3 {
+  width: 62%;
+}
 
 /* 01 — no ads */
 .demo-noads {
@@ -3189,8 +3195,12 @@ body::before {
   border: 1px dashed #d8b43a;
   border-radius: 4px;
 }
-.nd-ad.a1 { top: 28px; }
-.nd-ad.a2 { top: 74px; }
+.nd-ad.a1 {
+  top: 28px;
+}
+.nd-ad.a2 {
+  top: 74px;
+}
 
 /* 02 — scam blocked */
 .demo-scam {
@@ -3946,10 +3956,22 @@ body::before {
   animation: sheen-sweep 9s ease-in-out infinite;
 }
 @keyframes sheen-sweep {
-  0%, 16% { left: -60%; opacity: 0; }
-  22% { opacity: 1; }
-  44% { left: 130%; opacity: 0; }
-  100% { left: 130%; opacity: 0; }
+  0%,
+  16% {
+    left: -60%;
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+  }
+  44% {
+    left: 130%;
+    opacity: 0;
+  }
+  100% {
+    left: 130%;
+    opacity: 0;
+  }
 }
 
 /* Odometer price reels */
@@ -4610,11 +4632,17 @@ body::before {
     annual-glow 6.5s ease-in-out infinite;
 }
 @keyframes annual-float {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -7px; }
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -7px;
+  }
 }
 @keyframes annual-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow:
       0 24px 56px -16px rgba(122, 38, 20, 0.18),
       0 8px 20px -8px rgba(94, 64, 48, 0.14),

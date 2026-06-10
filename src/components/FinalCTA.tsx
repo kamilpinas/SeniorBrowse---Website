@@ -1,6 +1,6 @@
-import { PuzzlePiece } from '@phosphor-icons/react'
-import { useReveal } from '../hooks/useReveal'
-import FamilyCall from './hero/FamilyCall'
+import { PuzzlePiece } from "@phosphor-icons/react"
+import { useReveal } from "../hooks/useReveal"
+import OpenDoor from "./hero/OpenDoor"
 
 export default function FinalCTA() {
   const cta = useReveal<HTMLElement>()
@@ -10,10 +10,10 @@ export default function FinalCTA() {
     <>
       <section
         ref={cta.ref}
-        className={`final-cta reveal-cascade${cta.shown ? ' shown' : ''}`}
+        className={`final-cta reveal-cascade${cta.shown ? " shown" : ""}`}
         aria-labelledby="final-cta-h"
       >
-        <FamilyCall />
+        <OpenDoor />
 
         <p className="final-cta-eyebrow">And then — they're back in</p>
         <h2 id="final-cta-h" className="final-cta-h">
@@ -34,7 +34,7 @@ export default function FinalCTA() {
 
       <footer
         ref={footer.ref}
-        className={`site-footer reveal${footer.shown ? ' shown' : ''}`}
+        className={`site-footer reveal${footer.shown ? " shown" : ""}`}
       >
         <div className="footer-grid">
           <div className="footer-l">
@@ -54,9 +54,7 @@ export default function FinalCTA() {
             <a href="#faq">FAQ</a>
           </nav>
 
-          <p className="footer-r">
-            Built for the people we care for.
-          </p>
+          <p className="footer-r">Built for the people we care for.</p>
         </div>
       </footer>
     </>

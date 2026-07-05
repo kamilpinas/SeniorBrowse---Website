@@ -6,7 +6,7 @@ import FounderNote from './components/FounderNote'
 import SeeItInAction from './components/SeeItInAction'
 import Safety from './components/Safety'
 import SetupSteps from './components/SetupSteps'
-import Pricing from './components/Pricing'
+import Free from './components/Free'
 import FAQ from './components/FAQ'
 import FinalCTA from './components/FinalCTA'
 import { useLenis } from './hooks/useLenis'
@@ -24,8 +24,8 @@ export default function App() {
       <FounderNote />
       <Safety />
       <SetupSteps />
+      <Free />
       <FAQ />
-      <Pricing />
       <FinalCTA />
     </>
   )

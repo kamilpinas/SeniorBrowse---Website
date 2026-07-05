@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 /* Sections that should frame themselves when you settle near them. */
 const SNAP_SELECTOR =
-  '.hero, .see-it, .beforeafter, .founder-scene, .safety, .setup, .pricing, .faq, .final-cta'
+  '.hero, .see-it, .beforeafter, .founder-scene, .safety, .setup, .freeplan, .faq, .final-cta'
 
 /**
  * Mount once at the app root. Sets up Lenis smooth scroll, wires it into

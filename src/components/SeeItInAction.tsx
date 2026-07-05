@@ -28,6 +28,7 @@ import {
   PencilSimple,
 } from "@phosphor-icons/react"
 import { useReveal } from "../hooks/useReveal"
+import { useDemoScale } from "../hooks/useDemoScale"
 import WalkthroughVideo from "./WalkthroughVideo"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
@@ -71,6 +72,14 @@ export default function SeeItInAction() {
   const cursorRef = useRef<HTMLDivElement>(null)
   const rippleRef = useRef<HTMLSpanElement>(null)
   const autoRanRef = useRef(false)
+
+  // Scale the demo window down to fit narrow screens (design width 720px,
+  // below the 720px breakpoint) so the browser + side panel stay side by
+  // side instead of collapsing.
+  const { wrapRef: demoScaleRef, windowRef: demoWindowRef } = useDemoScale(
+    720,
+    720,
+  )
 
   // ── demo state ────────────────────────────────────────────────────
   const [currentPage, setCurrentPage] = useState<PageKey>("news")
@@ -472,7 +481,8 @@ export default function SeeItInAction() {
           Click anywhere to <strong>try it yourself</strong>
         </div>
 
-        <div className="demo-window">
+        <div className="demo-scale" ref={demoScaleRef}>
+          <div className="demo-window" ref={demoWindowRef}>
           {/* LIVE badge — shown while the auto-demo is running */}
           <span
             className={`demo-live${autoPlaying ? " show" : ""}`}
@@ -1184,6 +1194,7 @@ export default function SeeItInAction() {
                 <XCircle weight="bold" size={16} /> CLOSE PAGE
               </div>
             </aside>
+          </div>
           </div>
         </div>
       </div>

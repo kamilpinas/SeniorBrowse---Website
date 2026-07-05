@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { useParallax } from "../hooks/useParallax"
 import GrandmaAtComputer from "./hero/GrandmaAtComputer"
+import { EXTENSION_URL } from "../constants"
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -106,14 +107,14 @@ export default function Hero() {
         </p>
 
         <div className="cta-row anim-up d4">
-          <a href="#install" className="btn-primary">
+          <a href={EXTENSION_URL} className="btn-primary">
             <PuzzlePiece weight="bold" size={22} aria-hidden="true" />
             Add to Browser
           </a>
           <div className="cta-meta">
-            <span className="meta-1">7 days free</span>
+            <span className="meta-1">Free, forever</span>
             <span className="meta-2">
-              No card required · Works with any browser
+              No card, no account · Works with any browser
             </span>
           </div>
         </div>

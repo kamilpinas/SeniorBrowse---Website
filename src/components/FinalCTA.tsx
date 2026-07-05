@@ -1,5 +1,6 @@
 import { PuzzlePiece } from "@phosphor-icons/react"
 import { useReveal } from "../hooks/useReveal"
+import { EXTENSION_URL } from "../constants"
 import OpenDoor from "./hero/OpenDoor"
 
 export default function FinalCTA() {
@@ -23,12 +24,12 @@ export default function FinalCTA() {
           You set it up once. They get the people they love, the news they
           follow, the photos they've been missing — without the struggle.
         </p>
-        <a href="#install" className="btn-primary btn-xl">
+        <a href={EXTENSION_URL} className="btn-primary btn-xl">
           <PuzzlePiece weight="bold" size={26} aria-hidden="true" />
-          Add to Browser — 7 days free
+          Add to Browser — it's free
         </a>
         <p className="final-cta-note">
-          No card. No commitment. Done in 5 minutes.
+          Free, forever. No card, no account. Done in 5 minutes.
         </p>
       </section>
 
@@ -49,7 +50,7 @@ export default function FinalCTA() {
             <span aria-hidden="true">·</span>
             <a href="#safety">Safety</a>
             <span aria-hidden="true">·</span>
-            <a href="#pricing">Pricing</a>
+            <a href="#free">Free</a>
             <span aria-hidden="true">·</span>
             <a href="#faq">FAQ</a>
           </nav>

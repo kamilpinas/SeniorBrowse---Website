@@ -1,4 +1,5 @@
 import { Heart, PuzzlePiece } from '@phosphor-icons/react'
+import { EXTENSION_URL } from '../constants'
 
 export default function Topbar() {
   return (
@@ -12,9 +13,9 @@ export default function Topbar() {
       <nav className="topnav" aria-label="Primary">
         <a href="#see-it" className="nav-link">How it works</a>
         <a href="#safety" className="nav-link">Safety</a>
-        <a href="#pricing" className="nav-link">Pricing</a>
+        <a href="#free" className="nav-link">Free</a>
         <a href="#faq" className="nav-link">FAQ</a>
-        <a href="#install" className="btn-primary btn-nav">
+        <a href={EXTENSION_URL} className="btn-primary btn-nav">
           <PuzzlePiece weight="bold" size={16} aria-hidden="true" />
           Add to Browser
         </a>

@@ -11,57 +11,7 @@ import { useParallax } from '../hooks/useParallax'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const EMAIL = 'anna@family.com'
 const SWATCHES = ['#9c3520', '#1e6e4a', '#5878a0', '#6a5440']
-const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
-
-/** Step 1 — email field types itself when the thumb enters viewport.
- *  Closure-scoped cancelled/triggered so StrictMode's double-effect
- *  in dev doesn't kill the animation on first mount cleanup. */
-function TrialEmail() {
-  const ref = useRef<HTMLSpanElement>(null)
-  const [typed, setTyped] = useState(EMAIL)
-
-  useEffect(() => {
-    const node = ref.current
-    if (!node) return
-
-    let cancelled = false
-    let triggered = false
-
-    async function run() {
-      setTyped('')
-      await sleep(400)
-      if (cancelled) return
-      let s = ''
-      for (const c of EMAIL) {
-        if (cancelled) return
-        s += c
-        setTyped(s)
-        await sleep(70 + Math.random() * 30)
-      }
-    }
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !triggered) {
-          triggered = true
-          run()
-          obs.disconnect()
-        }
-      },
-      { threshold: 0.6 },
-    )
-    obs.observe(node)
-
-    return () => {
-      cancelled = true
-      obs.disconnect()
-    }
-  }, [])
-
-  return <span ref={ref}>{typed}<span className="trial-caret" /></span>
-}
 
 function StepArrow({ idx }: { idx: number }) {
   return (
@@ -170,7 +120,7 @@ export default function SetupSteps() {
       >
         <p className="eyebrow-c">Getting started</p>
         <h2 id="setup-h">Three steps. Done in <em>five minutes</em>.</h2>
-        <p className="subhead">Install and start your trial, customise the experience, then walk through the tutorial together. That's the entire setup.</p>
+        <p className="subhead">Add it and name them, customise the experience, then walk through the tutorial together. That's the entire setup.</p>
       </header>
 
       <div
@@ -185,12 +135,8 @@ export default function SetupSteps() {
                 <span className="mk"><Heart weight="fill" size={14} /></span>
                 <div className="brand-col">
                   <span className="t">SeniorBrowse</span>
-                  <span className="s">Start 7-day free trial</span>
+                  <span className="s">Free · no account</span>
                 </div>
-              </div>
-              <div className="trial-field">
-                <Envelope weight="fill" size={11} />
-                <TrialEmail />
               </div>
               <div className="trial-pair">
                 <span className="pair-chip"><b>YOU</b>Anna</span>
@@ -199,8 +145,8 @@ export default function SetupSteps() {
             </div>
           </div>
           <p className="step-num">Step 01</p>
-          <h3>Install &amp; start trial</h3>
-          <p>Add to your browser, drop in your email, and name the caregiver and the senior. Free 7-day trial begins right away.</p>
+          <h3>Add it &amp; name them</h3>
+          <p>Add SeniorBrowse to your browser, then enter the caregiver and senior's first names — used for greetings. It's free, no account needed.</p>
         </article>
 
         <StepArrow idx={1} />

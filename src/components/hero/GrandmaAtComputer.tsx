@@ -25,7 +25,14 @@ export default function GrandmaAtComputer() {
       preserveAspectRatio="xMidYMid meet"
     >
       {/* Floor shadow */}
-      <ellipse cx="270" cy="472" rx="190" ry="6" fill="#5e4030" opacity="0.16" />
+      <ellipse
+        cx="270"
+        cy="472"
+        rx="190"
+        ry="6"
+        fill="#5e4030"
+        opacity="0.16"
+      />
 
       {/* ─── CAREGIVER body (visible on the right, partly hidden behind Babcia) ─── */}
       <g className="caregiver-figure">
@@ -111,21 +118,7 @@ export default function GrandmaAtComputer() {
           strokeLinecap="round"
           opacity="0.55"
         />
-        {/* Sideburn hints over the ear area */}
-        <path
-          d="M 382 72 Q 380 88 384 98"
-          fill="none"
-          stroke="#6b4f3a"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-        <path
-          d="M 466 72 Q 468 88 464 98"
-          fill="none"
-          stroke="#6b4f3a"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
+
         {/* Eyebrows — slightly heavier */}
         <path
           d="M 397 70 Q 406 66 415 70"
@@ -218,14 +211,7 @@ export default function GrandmaAtComputer() {
       {/* ─── LAPTOP ─── */}
       <g className="laptop">
         <path d="M 138 480 L 402 480 L 416 452 L 124 452 Z" fill="#28180c" />
-        <rect
-          x="158"
-          y="358"
-          width="224"
-          height="96"
-          rx="7"
-          fill="#3a2a1c"
-        />
+        <rect x="158" y="358" width="224" height="96" rx="7" fill="#3a2a1c" />
         <rect
           x="162"
           y="362"
@@ -247,17 +233,6 @@ export default function GrandmaAtComputer() {
           fill="#7a2614"
           opacity="0.09"
         />
-        <g className="laptop-heart" transform="translate(270 400)">
-          <path
-            d="
-              M 0 6
-              C -8 -3 -18 -3 -18 6
-              C -18 18 -6 24 0 32
-              C 6 24 18 18 18 6
-              C 18 -3 8 -3 0 6 Z"
-            fill="#fdf9f4"
-          />
-        </g>
       </g>
 
       {/* ─── GRANDMA HEAD GROUP (rotates) — covers caregiver head on the left ─── */}
@@ -330,18 +305,24 @@ export default function GrandmaAtComputer() {
         <ellipse cx="270" cy="200" rx="84" ry="108" fill="#fdf0eb" />
 
         {/* Side hair tufts */}
-        <path
-          d="M 188 188 Q 178 218 196 250 Q 202 258 204 252 L 204 220 Q 202 198 188 188 Z"
-          fill="#c5beb5"
-        />
-        <path
-          d="M 354 188 Q 362 218 344 250 Q 338 258 336 252 L 336 220 Q 338 198 354 188 Z"
-          fill="#c5beb5"
-        />
 
         {/* Cheeks */}
-        <ellipse cx="214" cy="238" rx="15" ry="9" fill="#e09890" opacity="0.5" />
-        <ellipse cx="326" cy="238" rx="15" ry="9" fill="#e09890" opacity="0.5" />
+        <ellipse
+          cx="214"
+          cy="238"
+          rx="15"
+          ry="9"
+          fill="#e09890"
+          opacity="0.5"
+        />
+        <ellipse
+          cx="326"
+          cy="238"
+          rx="15"
+          ry="9"
+          fill="#e09890"
+          opacity="0.5"
+        />
 
         {/* Eyebrows */}
         <path
@@ -413,7 +394,14 @@ export default function GrandmaAtComputer() {
         </g>
 
         {/* Nose */}
-        <ellipse cx="270" cy="254" rx="6" ry="14" fill="#e8c5b8" opacity="0.55" />
+        <ellipse
+          cx="270"
+          cy="254"
+          rx="6"
+          ry="14"
+          fill="#e8c5b8"
+          opacity="0.55"
+        />
 
         {/* Mouth — small warm closed smile */}
         <path

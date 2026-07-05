@@ -16,7 +16,7 @@ const FAQS = [
   },
   {
     q: 'Is their browsing data private? Do you track them?',
-    a: "The browsing history stays on the senior's computer — it's stored locally and never leaves the machine. Our servers see only your email and license status. We don't analyse, sell, or look at their browsing.",
+    a: "The browsing history stays on the senior's computer — it's stored locally and never leaves the machine. There's no account and no sign-in, so there's nothing for us to collect. We don't analyse, sell, or look at their browsing — we can't.",
   },
   {
     q: 'Does it work on their computer?',
@@ -27,12 +27,12 @@ const FAQS = [
     a: 'Yes, if they let you log into their computer over a video call or remote desktop session. Setup is just clicking "Add to Browser" and following the wizard — you can do it for them in five minutes.',
   },
   {
-    q: 'What happens after the 7-day trial?',
-    a: "You decide whether to subscribe. There's no card on file, so nothing charges automatically. We'll email you a reminder the day before the trial ends.",
+    q: 'Is it really free? What’s the catch?',
+    a: "It's genuinely free — no trial that expires, no card, no account. If it helps someone you love and you'd like to chip in to keep it going, you can pay what feels right, any time. You never have to.",
   },
   {
     q: "What if they decide they don't like it?",
-    a: 'You can uninstall the extension at any time — their normal browser comes back exactly as it was. The subscription cancels any time from your account page.',
+    a: 'You can uninstall the extension at any time — their normal browser comes back exactly as it was. Nothing to cancel, nothing to pay.',
   },
 ]
 

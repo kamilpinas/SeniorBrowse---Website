@@ -11,6 +11,8 @@ import {
   Star,
   Palette,
   House,
+  SpeakerHigh,
+  SpeakerSlash,
 } from "@phosphor-icons/react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -23,7 +25,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
    Put the file in /public and point VIDEO_SRC at it, e.g.
      VIDEO_SRC  = "/walkthrough.mp4"
      POSTER_SRC = "/walkthrough-poster.jpg"                          */
-const VIDEO_SRC = ""
+const VIDEO_SRC = "movie.mp4"
 const POSTER_SRC = ""
 
 /* The setup steps that tick off as the video plays. Optionally give
@@ -31,13 +33,13 @@ const POSTER_SRC = ""
    leave STEP_TIMES empty to split evenly across the video length. */
 const STEPS = [
   { Icon: PuzzlePiece, text: "Add SeniorBrowse to your browser" },
-  { Icon: Envelope, text: "Enter your email & their name" },
+  { Icon: Envelope, text: "Enter yours & their name" },
   { Icon: Star, text: "Pick a few favourite sites" },
   { Icon: Palette, text: "Choose the theme & text size" },
   { Icon: LockSimple, text: "Set a caregiver PIN" },
   { Icon: House, text: "Hand over a ready home screen" },
 ]
-const STEP_TIMES: number[] = [] // e.g. [0, 9, 21, 34, 46, 54]
+const STEP_TIMES: number[] = [8, 17, 19, 20, 27, 52] // e.g. [0, 9, 21, 34, 46, 54]
 
 function fmt(s: number) {
   if (!isFinite(s)) s = 0
@@ -56,6 +58,16 @@ export default function WalkthroughVideo() {
   const [playing, setPlaying] = useState(false)
   const [current, setCurrent] = useState(0)
   const [duration, setDuration] = useState(0)
+  const [volume, setVolume] = useState(1)
+  const [muted, setMuted] = useState(false)
+
+  // Keep the video element in sync with the volume/mute UI state.
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    v.volume = volume
+    v.muted = muted
+  }, [volume, muted])
 
   // E1 — focus-pull entrance: the window fades in slightly blurred and
   // scaled, then "pulls into focus" as it settles.
@@ -139,6 +151,14 @@ export default function WalkthroughVideo() {
     tiltRef.current?.requestFullscreen?.()
   }
 
+  const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value)
+    setVolume(val)
+    setMuted(val === 0)
+  }
+
+  const toggleMute = () => setMuted((m) => !m)
+
   const pct = duration ? (current / duration) * 100 : 0
 
   // T3 — how many steps are "done" given the current playback time.
@@ -147,7 +167,10 @@ export default function WalkthroughVideo() {
     if (STEP_TIMES.length === STEPS.length) {
       stepsDone = STEP_TIMES.filter((t) => current >= t).length
     } else {
-      stepsDone = Math.min(STEPS.length, Math.floor((current / duration) * STEPS.length))
+      stepsDone = Math.min(
+        STEPS.length,
+        Math.floor((current / duration) * STEPS.length),
+      )
     }
   }
 
@@ -256,6 +279,34 @@ export default function WalkthroughVideo() {
               <span className="vc-time">
                 {fmt(current)} / {fmt(duration)}
               </span>
+              <div className="vc-volume">
+                <button
+                  className="vc-btn vc-mute"
+                  onClick={toggleMute}
+                  aria-label={muted ? "Unmute" : "Mute"}
+                >
+                  {muted || volume === 0 ? (
+                    <SpeakerSlash weight="fill" size={16} />
+                  ) : (
+                    <SpeakerHigh weight="fill" size={16} />
+                  )}
+                </button>
+                <input
+                  className="vc-vol-slider"
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  value={muted ? 0 : volume}
+                  onChange={changeVolume}
+                  aria-label="Volume"
+                  style={{
+                    background: `linear-gradient(to right, var(--color-accent) ${
+                      (muted ? 0 : volume) * 100
+                    }%, rgba(255, 255, 255, 0.14) ${(muted ? 0 : volume) * 100}%)`,
+                  }}
+                />
+              </div>
               <button
                 className="vc-fs"
                 aria-label="Fullscreen"

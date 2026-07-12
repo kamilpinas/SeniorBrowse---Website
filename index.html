@@ -2,9 +2,159 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SeniorBrowse — You set it up. They just browse.</title>
+
+    <!-- Primary meta -->
+    <title>SeniorBrowse — A simpler, safer browser for seniors</title>
+    <meta
+      name="description"
+      content="SeniorBrowse makes the internet simple for the people you love — a calm home screen, big buttons, and a helper panel on every page. Free, forever."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#9c3520" />
+    <link rel="canonical" href="https://seniorbrowse.pages.dev/" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SeniorBrowse" />
+    <meta
+      property="og:title"
+      content="SeniorBrowse — A simpler, safer browser for seniors"
+    />
+    <meta
+      property="og:description"
+      content="You set it up once. They just browse — a calm home screen, big buttons, and a helper panel on every page. Free, forever."
+    />
+    <meta property="og:url" content="https://seniorbrowse.pages.dev/" />
+    <meta property="og:image" content="https://seniorbrowse.pages.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="SeniorBrowse — a simpler, safer browser for seniors."
+    />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="SeniorBrowse — A simpler, safer browser for seniors"
+    />
+    <meta
+      name="twitter:description"
+      content="You set it up once. They just browse — a calm home screen, big buttons, and a helper panel on every page. Free, forever."
+    />
+    <meta name="twitter:image" content="https://seniorbrowse.pages.dev/og-image.png" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://seniorbrowse.pages.dev/#organization",
+            "name": "SeniorBrowse",
+            "url": "https://seniorbrowse.pages.dev/",
+            "logo": "https://seniorbrowse.pages.dev/logo.svg"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://seniorbrowse.pages.dev/#website",
+            "url": "https://seniorbrowse.pages.dev/",
+            "name": "SeniorBrowse",
+            "publisher": { "@id": "https://seniorbrowse.pages.dev/#organization" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "SeniorBrowse",
+            "applicationCategory": "BrowserApplication",
+            "operatingSystem": "Windows, macOS, ChromeOS, Linux",
+            "url": "https://seniorbrowse.pages.dev/",
+            "description": "A browser extension that makes the internet simple for seniors. A caregiver sets it up once — a calm home screen, big buttons, and a helper panel on every page.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "publisher": { "@id": "https://seniorbrowse.pages.dev/#organization" }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Will the senior need to learn anything new?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "After you set it up, they see one screen: their home page with a few big tiles. The side panel does everything else. No menus, no toolbars, no learning curve."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What if they already have a browser set up — will it break their bookmarks?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. SeniorBrowse installs as an extension. Their existing bookmarks, saved passwords, and history stay exactly where they are. You can choose to show or hide the regular browser interface."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I see what they've been browsing?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. The Activity Log inside Settings shows every page they've visited, with timestamps. You'll see it during your weekly check-in, or whenever you visit them."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is their browsing data private? Do you track them?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The browsing history stays on the senior's computer — it's stored locally and never leaves the machine. There's no account and no sign-in, so there's nothing for us to collect. We don't analyse, sell, or look at their browsing — we can't."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does it work on their computer?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes — on Mac, Windows, or any modern computer. Anywhere a modern browser runs, SeniorBrowse runs."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I install it on their computer remotely?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, if they let you log into their computer over a video call or remote desktop session. Setup is just clicking Add to Browser and following the wizard — you can do it for them in five minutes."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is it really free? What's the catch?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It's genuinely free — no trial that expires, no card, no account. If it helps someone you love and you'd like to chip in to keep it going, you can pay what feels right, any time. You never have to."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What if they decide they don't like it?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "You can uninstall the extension at any time — their normal browser comes back exactly as it was. Nothing to cancel, nothing to pay."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
